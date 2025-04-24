@@ -411,6 +411,14 @@ html {
     height: 85%;
     overflow-y: auto;
     scrollbar-width: none;
+    opacity: 0; /* Начальная прозрачность */
+    visibility: hidden; /* Начальная видимость */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-modal.active {
+    opacity: 1; /* Полная видимость */
+    visibility: visible; /* Активное состояние */
 }
 
 .modal-content {

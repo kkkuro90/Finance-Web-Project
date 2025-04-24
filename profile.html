@@ -7,6 +7,7 @@
 </head>
 <body>
     <div class="container">
+        <!-- Боковая панелька -->
         <div class="col-md-3 col-lg-2 sidebar">
             <h1 class="text-center mb-4 sidebar-title">Waves</h1>
             <ul class="nav flex-column">
@@ -52,6 +53,7 @@
             </div>
         </div>
 
+        <!-- Инфа о пользователе -->
         <form class="register-form" id="profileInfo">
             <div class="profile-centered">
                 <div class="profile-avatar">
@@ -67,7 +69,8 @@
             </div>
         </form>
 
-        <div class="settings-modal" id="settingsModal" style="display: none;">
+        <!-- Настройки -->
+        <div class="settings-modal" id="settingsModal">
             <div class="modal-content">
                 <button class="close-button" onclick="toggleSettings()">&times;</button>
                 <h2 style="text-align: center;">Настройки профиля</h2>
@@ -94,15 +97,18 @@
 
     <script>
         function toggleSettings() {
-            const profileInfo = document.getElementById('profileInfo');
             const settingsModal = document.getElementById('settingsModal');
 
-            if (profileInfo.style.display === 'none') {
-                profileInfo.style.display = 'block';
-                settingsModal.style.display = 'none';
+            if (settingsModal.classList.contains('active')) {
+                settingsModal.classList.remove('active');
+                setTimeout(() => {
+                    settingsModal.style.display = 'none';
+                }, 300); 
             } else {
-                profileInfo.style.display = 'none';
                 settingsModal.style.display = 'flex';
+                setTimeout(() => {
+                    settingsModal.classList.add('active');
+                }, 10); 
             }
         }
     </script>
