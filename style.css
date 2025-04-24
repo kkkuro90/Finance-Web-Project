@@ -1,0 +1,440 @@
+body { 
+    margin: 0; 
+    min-height: 100vh; 
+    background: #18181a; 
+    color: #fff; 
+    font-family: 'Inter', Arial, sans-serif; 
+    font-weight: 400; 
+    line-height: 1.4; 
+} 
+.container { 
+    min-height: 100vh; 
+    width: 100vw; 
+    background: linear-gradient(to right, #a020f0 0%, #3a1857 35%, #18181a 70%);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 2rem; 
+    box-sizing: border-box; 
+    justify-content: center;
+} 
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    width: 100%; 
+    margin-bottom: 3rem; 
+    padding: 0 1rem; 
+} 
+.logo { 
+    font-size: 1.5rem; 
+    font-weight: 700; 
+} 
+.auth-buttons { 
+    display: flex; 
+    gap: 1rem; 
+} 
+.auth-buttons a { 
+    color: #fff; 
+    text-decoration: none; 
+    opacity: 0.7; 
+} 
+.main-content { 
+    text-align: center; 
+    max-width: 800px; 
+    margin-bottom: 4rem; 
+} 
+.main-title { 
+    font-size: 3rem; 
+    font-weight: 700; 
+    margin-bottom: 1rem; 
+} 
+.h1{ 
+    font-size: 2rem; 
+    font-weight: 700; 
+    margin-bottom: 1rem; 
+} 
+.h2{
+    font-size: 1.5rem; 
+    font-weight: 600; 
+    margin-bottom: 0.7rem;
+}
+.h3{ 
+    font-size: 1rem; 
+    font-weight: 500; 
+    margin-bottom: 0.5rem; 
+} 
+.description { 
+    font-size: 1.1rem; 
+    opacity: 0.8; 
+    margin-bottom: 2rem; 
+} 
+.primary-button { 
+    background-color: rgb(160, 32, 240); 
+    color: #fff; 
+    border: none; 
+    padding: 1rem 2rem; 
+    border-radius: 2rem; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    text-decoration: none; 
+} 
+.features { 
+    display: flex; 
+    gap: 3rem; 
+    margin-bottom: 3rem; 
+} 
+.feature-card { 
+    background: rgba(24, 24, 26, 0.7); 
+    border-radius: 1rem; 
+    padding: 2rem; 
+    text-align: center; 
+    width: 200px; 
+    opacity: 0.9; 
+     
+    box-shadow: 0 8px 32px 0 rgba(160, 32, 240, 0.15); 
+} 
+.feature-title { 
+    font-size: 1rem; 
+    font-weight: 500; 
+    margin-bottom: 0.5rem; 
+} 
+.fullwidth-band { 
+    width: 105%; 
+    background-color: rgba(206, 150, 255, 0.15); 
+    color: #fff; 
+    padding: 2rem 0; 
+    text-align: center; 
+    box-sizing: border-box; 
+} 
+ 
+.band-content { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 0 2rem; 
+} 
+.register-form { 
+    background: #18181ab3; 
+    border-radius: 1rem; 
+    padding: 2rem; 
+    width: 400px; 
+    opacity: 0.9; 
+    box-shadow: 0 8px 32px 0 #1f268726; 
+} 
+.form-group { 
+    margin-bottom: 1.5rem; 
+} 
+.form-group label { 
+    display: block; 
+    font-size: 1rem; 
+    margin-bottom: 0.5rem; 
+    opacity: 0.8; 
+} 
+
+
+/* ОНО ТУТА */
+/* ОНО ТУТА */
+/* ОНО ТУТА */
+/* ОНО ТУТА */
+/* ОНО ТУТА */
+/* ОНО ТУТА */
+/* ОНО ТУТА */
+.form-group input { 
+    width: 100%; 
+    padding: 0.8rem; 
+    border: none; 
+    border-radius: 2rem; 
+    background: rgba(255, 255, 255, 0.1); 
+    color: #fff; 
+    font-size: 1rem; 
+    box-sizing: border-box; 
+} 
+ 
+.account-types { 
+    display: flex; 
+    justify-content: center; 
+    gap: 2rem; 
+    margin-top: 2rem; 
+    margin-bottom: 4rem; 
+} 
+ 
+.account-card { 
+    background: rgba(24, 24, 26, 0.7); 
+    border-radius: 1rem; 
+    padding: 2rem; 
+    text-align: center; 
+    width: 300px; 
+    opacity: 0.9; 
+    box-shadow: 0 8px 32px 0 rgba(160, 32, 240, 0.15); 
+} 
+ 
+.account-card img { 
+    max-width: 100%; 
+    height: auto; 
+    border-radius: 0.5rem; 
+    margin-top: 1rem; 
+    transform: scale(1.6); 
+} 
+ 
+.site-footer { 
+    background: radial-gradient(circle at 0% 30%, #a020f0 -65%, #3a1857 -90%, #18181a 70%); 
+    color: #fff; 
+    padding: 40px 20px; 
+} 
+ 
+.footer-container { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    flex-direction: column;
+    gap: 20px; 
+} 
+ 
+.footer-section { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex: 1; 
+    margin: 0 10px; 
+    min-width: 200px; 
+} 
+ 
+.footer-links { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+} 
+ 
+.footer-contact-info { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+} 
+ 
+.footer-bottom { 
+    text-align: center; 
+    margin-top: 30px; 
+    padding-top: 20px; 
+    border-top: 1px solid #444; 
+    font-size: 0.8rem; 
+}
+
+.already {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+  
+.already a {
+    color: #ffffff;
+    text-decoration: underline;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+  
+.testimonials {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.testimonial-card {
+    background-color: rgba(206, 150, 255, 0.15); 
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: left;
+    width: 100%; 
+    box-sizing: border-box; 
+    margin-bottom: 1rem; 
+}
+
+.testimonial-card p:last-child {
+    text-align: right;
+    font-weight: bold;
+}
+
+html {
+    scroll-behavior: smooth;
+  }
+
+  .how-it-works .band-content {
+    max-width: 1000px;
+}
+
+.how-it-works-steps {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.step-card {
+    background-color: rgba(206, 150, 255, 0.15);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+    box-sizing: border-box;
+}
+
+.step-card img {
+    max-width: 70px;
+    margin-bottom: 10px;
+}
+
+.step-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.step-card p {
+    font-size: 1rem;
+}
+
+.sidebar {
+    min-height: 100vh;
+    background-color: rgba(27, 22, 29, 0.8); /* 1B161D с прозрачностью 80% */
+    padding-top: 20px;
+    position: fixed; 
+    top: 0;            
+    left: 0;           
+    width: 18%    
+}
+
+.sidebar-title {
+    color: white;
+    text-align: center;
+}
+
+.sidebar-link {
+    font-size: 130%;
+    color: white;
+    text-decoration: none;
+}
+
+.nav {
+    list-style: none;
+}
+
+.balance-title {
+    color: white;
+    text-align: center;
+    font-size: 1.5rem; 
+    font-weight: 600; 
+    margin-bottom: 0.7rem;
+}
+
+.total-balance {
+    color: white;
+    text-align: center;
+}
+
+.expense {
+    font-size: large;
+    text-align: center;
+    color: #dc3545;
+}
+
+.income-expense {
+    display: flex;
+    justify-content: space-around; 
+    align-items: flex-start;
+    margin: 0 auto; 
+}
+
+.income,
+.expense {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.income p,
+.expense p {
+    font-size: large;
+    margin: 0;
+}
+
+.income {
+    color: #28a745;
+}
+
+.profile-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.profile-info {
+    background-color: rgba(206, 150, 255, 0.15);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; 
+}
+
+.profile-centered {
+    text-align: center; 
+    margin-bottom: 1rem; 
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1rem; 
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.profile-text {
+    text-align: left; 
+    margin-bottom: 0.5rem;
+}
+
+.settings-modal {
+    display: none; 
+    background: #18181ab3; 
+    border-radius: 1rem; 
+    padding: 2rem; 
+    width: 400px; 
+    opacity: 0.9; 
+    box-shadow: 0 8px 32px 0 #1f268726; 
+}
+
+.modal-content {
+    padding: 2rem;
+    border-radius: 8px;
+    width: 400px; 
+    max-width: 90%;
+    position: relative;
+}
+
+.close-button {
+    background-color: rgb(160, 32, 240); 
+    color: #fff; 
+    border: none; 
+    padding: 0.6rem 1rem; 
+    border-radius: 2rem; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    text-decoration: none; 
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+}
