@@ -41,6 +41,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // Add Authorization
 builder.Services.AddAuthorization();
 
@@ -56,7 +67,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+// Используем CORS
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
 // Use Authentication and Authorization

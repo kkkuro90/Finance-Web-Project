@@ -32,7 +32,10 @@ namespace FinanceApp.Controllers
             {
                 UserName = model.Email, // Используем email как UserName
                 Email = model.Email,
-                Login = model.Login // Добавляем логин
+                Login = model.Login, // Добавляем логин
+                FirstName = model.FirstName, // Добавляем имя
+                LastName = model.LastName, // Добавляем фамилию
+                Balance = 0 // Устанавливаем начальный баланс
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -73,6 +76,26 @@ namespace FinanceApp.Controllers
                 Expiration = token.ValidTo
             });
         }
+
+        // Получение информации о пользователе
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                return NotFound(new { Message = "User not found." });
+
+            return Ok(new
+            {
+                Login = user.Login,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Balance = user.Balance
+            });
+        }
     }
 
     public class RegisterModel
@@ -80,6 +103,8 @@ namespace FinanceApp.Controllers
         public string Login { get; set; } // Логин
         public string Email { get; set; } // Email
         public string Password { get; set; } // Пароль
+        public string FirstName { get; set; } // Имя
+        public string LastName { get; set; } // Фамилия
     }
 
     public class LoginModel
