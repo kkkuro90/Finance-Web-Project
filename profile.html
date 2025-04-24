@@ -7,7 +7,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Боковая панелька -->
         <div class="col-md-3 col-lg-2 sidebar">
             <h1 class="text-center mb-4 sidebar-title">Waves</h1>
             <ul class="nav flex-column">
@@ -53,26 +52,24 @@
             </div>
         </div>
 
-        <!-- Инфа о пользователе -->
         <form class="register-form" id="profileInfo">
             <div class="profile-centered">
                 <div class="profile-avatar">
                     <img src="https://i.pinimg.com/474x/d5/82/9d/d5829d01f4425addd09920f1b02bd1e4.jpg" alt="Аватар профиля">
                 </div>
-                <h2 id="profileName">Surname Name</h2>
+                <h2>Surname Name</h2>
             </div>
             <p class="profile-text">Логин: User123456</p>
-            <p class="profile-text" id="profileEmail">Email: userl@example.com</p>
+            <p class="profile-text">Email: userl@example.com</p>
             <p class="profile-text">Баланс: 100 руб.</p>
             <div class="profile-centered">
-                <button type="button" class="primary-button" style="width: 100%; margin-top: 4rem;" id="openSettingsButton">Настройки профиля</button>
+                <button type="button" class="primary-button" style="width: 100%; margin-top: 4rem;" onclick="toggleSettings()">Настройки профиля</button>
             </div>
         </form>
 
-        <!-- Настройки -->
         <div class="settings-modal" id="settingsModal" style="display: none;">
             <div class="modal-content">
-                <button class="close-button" id="closeSettingsButton">&times;</button>
+                <button class="close-button" onclick="toggleSettings()">&times;</button>
                 <h2 style="text-align: center;">Настройки профиля</h2>
                 <div class="form-group">
                     <label for="name">Имя:</label><br>
@@ -89,10 +86,25 @@
                 
                 <h2 style="text-align: center;">Управление бюджетом</h2>
                 <button class="primary-button add-source">Добавить источник дохода</button>
-                <button class="primary-button" style="width: 100%;" id="saveSettingsButton">Сохранить изменения</button>
+                <button class="primary-button" style="width: 100%;" onclick="toggleSettings()">Сохранить изменения</button>
                 <button class="primary-button delete-account">Удалить аккаунт</button>
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleSettings() {
+            const profileInfo = document.getElementById('profileInfo');
+            const settingsModal = document.getElementById('settingsModal');
+
+            if (profileInfo.style.display === 'none') {
+                profileInfo.style.display = 'block';
+                settingsModal.style.display = 'none';
+            } else {
+                profileInfo.style.display = 'none';
+                settingsModal.style.display = 'flex';
+            }
+        }
+    </script>
 </body>
 </html>
