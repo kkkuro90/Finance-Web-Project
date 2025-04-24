@@ -1,0 +1,14 @@
+# Ignore build artifacts
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.vs
+.vscode/
+
+# Ignore secrets
+appsettings.json
+
+# Ignore NuGet packages
+packages/
