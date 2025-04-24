@@ -1,0 +1,843 @@
+<html lang="ru"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финансовый менеджер - Управление личными финансами</title>
+    <link href="bootstrap.css" rel="stylesheet">
+</head>
+<body class="" style="">
+    <div class="container-fluid">
+        <div class="row">
+            
+            <!-- Сайдбар -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <h4 class="text-center mb-4" style="color: white;">Финансовый <br>менеджер</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a style="font-size: 130%;" class="nav-link active" href="#" id="dashboard-tab">
+                            <i class="bi bi-speedometer2 me-2"></i> Дашборд
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="font-size: 130%;" class="nav-link" href="#" id="history-tab">
+                            <i class="bi bi-clock-history me-2"></i> История
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="font-size: 130%;" class="nav-link" href="#" id="categories-tab">
+                            <i class="bi bi-tags me-2"></i> Категории
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="font-size: 130%;" class="nav-link" href="#" id="analytics-tab">
+                            <i class="bi bi-graph-up me-2"></i> Аналитика
+                        </a>
+                    </li>
+                </ul>
+                <div style="background-color: #390668;" class="mt-4 p-3">
+                    <h6 style="color: white; text-align: center; font-size: 170%;">Общий баланс</h6>
+                    <h3 id="total-balance" style="color: white; text-align: center;">25,430.50 ₽</h3>
+                    <div class="d-flex justify-content-between">
+                        <p style="font-size: large; text-align: center;" class="text-success">Доход: <span id="total-income">32,500.00 ₽</span></p>
+                        <p style="font-size: large; text-align: center;" class="text-danger">Расход: <span id="total-expense">7,069.50 ₽</span></p>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Основное содержимое -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Дашборд -->
+                <div id="dashboard-content">
+                    <div style="display: flex; position: absolute; bottom: 5%; left: 3%;">
+                        <button style="font-size: 115%;" class="btn btn-primary me-2" id="add-transaction">
+                            Добавить операцию
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 style="color: white; font-size: 275%;">Дашборд</h2>
+                        <div>
+                            <button style="position: absolute; right: 30rem; background-color: #5b248f;" class="btn btn-primary">
+                                Статистика по категориям
+                            </button>
+                        </div>
+                        <div>
+                            <button style="position: absolute; right: 6rem; width: 14rem; background-color: #5b248f;" class="btn btn-primary">
+                                Динамика расходов
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Быстрые действия</h5>
+                                </div>
+                                <div style="background-color: #390668;" class="card-body">
+                                    <button style="width: 48.5%; color: white; background-color: rgba(139, 71, 184, 0.575);" class="btn btn-outline-primary me-2 mb-2">Повторить платеж</button>
+                                    <button style="width: 48.5%; color: white; background-color: rgba(139, 71, 184, 0.575);" class="btn btn-outline-success me-2 mb-2">Добавить доход</button>
+                                    <button style="width: 48.5%; color: white; background-color: rgba(139, 71, 184, 0.575);" class="btn btn-outline-danger me-2 mb-2">Добавить расход</button>
+                                    <button style="width: 48.5%; color: white; background-color: rgba(139, 71, 184, 0.575);" class="btn btn-outline-secondary mb-2">Экспорт данных</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Последние операции</h5>
+                                    <a style="text-decoration: none; color: white;" href="#" class="small">Все операции</a>
+                                </div>
+                                <div style="background-color: #390668;" class="card-body">
+                                    <div style="background-color: rgba(139, 71, 184, 0.575);" class="transaction-item expense">
+                                        <div style="color: white;" class="d-flex justify-content-between">
+                                            <p>Продукты</p>
+                                            <span class="text-danger">-1,250.00 ₽</span>
+                                        </div>
+                                        <small class="text-muted">Магнит, 15 апр 2023</small>
+                                    </div>
+                                    <div style="background-color: rgba(139, 71, 184, 0.575);" class="transaction-item income">
+                                        <div style="color: white;" class="d-flex justify-content-between">
+                                            <p>Зарплата</p>
+                                            <span class="text-success">+30,000.00 ₽</span>
+                                        </div>
+                                        <small class="text-muted">ООО "Компания", 10 апр 2023</small>
+                                    </div>
+                                    <div style="background-color: rgba(139, 71, 184, 0.575);" class="transaction-item expense">
+                                        <div style="color: white;" class="d-flex justify-content-between">
+                                            <p>Кафе</p>
+                                            <span class="text-danger">-850.00 ₽</span>
+                                        </div>
+                                        <small class="text-muted">Starbucks, 8 апр 2023</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div style="background-color: #21013f;" class="card">
+                                <h2 style="text-align: center; color: white;">
+                                    Статистика по категориям
+                                </h2>
+                                <div class="card-body">
+                                    <canvas style="background-color: rgba(139, 71, 184, 0.575);" id="categoriesChart" height="495" width="495" style="box-sizing: border-box; height: 495px; width: 495px;"></canvas>
+                                </div>
+                            </div>
+
+                            <!--
+                            <div class="card">
+                                <div class="">
+                                    <h5 class="card-title">Динамика расходов</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="expensesChart" height="413" width="495" style="display: block; box-sizing: border-box; height: 413px; width: 495px;"></canvas>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                </div>
+                <!-- История операций -->
+                <div id="history-content" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 style="color: white; font-size: 260%;">История операций</h2>
+                        <div>
+                            <button class="btn btn-primary me-2" id="analyze-transactions">
+                                <i class="bi bi-graph-up"></i> Анализировать
+                            </button>
+                            <button class="btn btn-outline-primary" id="filter-transactions">
+                                <i class="bi bi-funnel"></i> Фильтр
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4" id="filter-section" style="display: none;">
+                        <div style="background-color: #390668;" class="card-body">
+                            <form>
+                                <div style="color: white" class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Период</label>
+                                        <select class="form-select">
+                                            <option>За все время</option>
+                                            <option selected="">Этот месяц</option>
+                                            <option>Прошлый месяц</option>
+                                            <option>Этот год</option>
+                                            <option>Прошлый год</option>
+                                            <option>Произвольный</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">С</label>
+                                        <input type="date" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">По</label>
+                                        <input type="date" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Тип</label>
+                                        <select class="form-select">
+                                            <option>Все</option>
+                                            <option>Доходы</option>
+                                            <option>Расходы</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="color: white" class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Категория</label>
+                                        <select class="form-select">
+                                            <option>Все категории</option>
+                                            <option>Продукты</option>
+                                            <option>Транспорт</option>
+                                            <option>Развлечения</option>
+                                            <option>ЖКХ</option>
+                                            <option>Здоровье</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Сумма</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" placeholder="От">
+                                            <input type="number" class="form-control" placeholder="До">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <label style="color: white" class="form-label">Поиск</label>
+                                        <input type="text" class="form-control" placeholder="Поиск по описанию">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary me-2">Применить</button>
+                                    <button style="background-color: #615e68;" type="reset" class="btn btn-outline-secondary">Сбросить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 style="font-size: 185%;" class="card-title">Список операций</h5>
+                            <input type="text" class="form-control form-control-sm" placeholder="Поиск..." style="width: 200px; background-color: #615e68;">
+                        </div>
+                        <div style="background-color: #390668;" class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: #5b248f; color: white; text-align: center;">Дата</th>
+                                            <th style="background-color: #5b248f; color: white; text-align: center;">Категория</th>
+                                            <th style="background-color: #5b248f; color: white; text-align: center;">Описание</th>
+                                            <th style="background-color: #5b248f; color: white; text-align: center;">Сумма</th>
+                                            <th style="background-color: #5b248f; color: white; text-align: center;">Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-danger">
+                                            <td style="color: white; text-align: center;">15.04.2023</td>
+                                            <td style="color: white; text-align: center;">Продукты</td>
+                                            <td style="color: white; text-align: center;">Магнит</td>
+                                            <td style="color: white; text-align: center;">-1,250.00 ₽</td>
+                                            <td style="text-align: center;">
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-secondary">Повторить</button>
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-primary">Изменить</button>
+                                            </td>
+                                        </tr>
+                                        <tr class="table-danger">
+                                            <td style="color: white; text-align: center;">10.04.2023</td>
+                                            <td style="color: white; text-align: center;">Зарплата</td>
+                                            <td style="color: white; text-align: center;">ООО "Компания"</td>
+                                            <td style="color: white; text-align: center;">+30,000.00 ₽</td>
+                                            <td style="text-align: center;">
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-secondary">Повторить</button>
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-primary">Изменить</button>
+                                            </td>
+                                        </tr>
+                                        <tr class="table-danger">
+                                            <td style="color: white; text-align: center;">08.04.2023</td>
+                                            <td style="color: white; text-align: center;">Кафе</td>
+                                            <td style="color: white; text-align: center;">Starbucks</td>
+                                            <td style="color: white; text-align: center;">-850.00 ₽</td>
+                                            <td style="text-align: center;">
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-secondary">Повторить</button>
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-primary">Изменить</button>
+                                            </td>
+                                        </tr>
+                                        <tr class="table-danger">
+                                            <td style="color: white; text-align: center;">05.04.2023</td>
+                                            <td style="color: white; text-align: center;">Транспорт</td>
+                                            <td style="color: white; text-align: center;">Такси</td>
+                                            <td style="color: white; text-align: center;">-450.00 ₽</td>
+                                            <td style="text-align: center;">
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-secondary">Повторить</button>
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-primary">Изменить</button>
+                                            </td>
+                                        </tr>
+                                        <tr class="table-danger">
+                                            <td style="color: white; text-align: center;">01.04.2023</td>
+                                            <td style="color: white; text-align: center;">ЖКХ</td>
+                                            <td style="color: white; text-align: center;">Квартплата</td>
+                                            <td style="color: white; text-align: center;">-12,000.00 ₽</td>
+                                            <td style="text-align: center;">
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-secondary">Повторить</button>
+                                                <button style="background-color: #615e68;" class="btn btn-sm btn-outline-primary">Изменить</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled">
+                                        <a style="color: white;" class="page-link" href="#" tabindex="-1">Назад</a>
+                                    </li>
+                                    <li class="page-item active"><a style="color: white;" class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a style="color: white;" class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a style="color: white;" class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a style="color: white;" class="page-link" href="#">Вперед</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Категории -->
+                <div id="categories-content" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 style="color: white; font-size: 260%;">Управление категориями</h2>
+                        <button class="btn btn-primary" id="add-category">
+                            <i class="bi bi-plus-circle"></i> Добавить категорию
+                        </button>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Категории расходов</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            Продукты
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            Транспорт
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            Кафе и рестораны
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            ЖКХ
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            Развлечения
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Категории доходов</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            Зарплата
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            Фриланс
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            Инвестиции
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-1">Изменить</button>
+                                                <button class="btn btn-sm btn-outline-danger">Удалить</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h5 class="card-title">Статистика по категории</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Выберите категорию</label>
+                                        <select class="form-select" id="category-stats-select">
+                                            <option>Продукты</option>
+                                            <option>Транспорт</option>
+                                            <option>Кафе и рестораны</option>
+                                            <option>ЖКХ</option>
+                                            <option>Развлечения</option>
+                                            <option>Зарплата</option>
+                                            <option>Фриланс</option>
+                                            <option>Инвестиции</option>
+                                        </select>
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <strong>Продукты</strong><br>
+                                        Всего расходов: 12,450.00 ₽<br>
+                                        Средний расход: 3,112.50 ₽ в месяц<br>
+                                        Процент от общих расходов: 34%
+                                    </div>
+                                    <canvas id="categoryChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Аналитика -->
+                <div id="analytics-content" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 style="color: white; font-size: 260%;">Аналитика расходов</h2>
+                        <div>
+                            <select class="form-select me-2" style="width: auto; display: inline-block;">
+                                <option>Апрель 2023</option>
+                                <option>Март 2023</option>
+                                <option>Февраль 2023</option>
+                                <option>Январь 2023</option>
+                            </select>
+                            <button class="btn btn-outline-primary" id="export-analytics">
+                                <i class="bi bi-download"></i> Экспорт
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Распределение расходов</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="analyticsPieChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Динамика расходов</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="analyticsLineChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Сравнение по месяцам</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="analyticsBarChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления операции -->
+    <div class="modal fade" id="transactionModal" tabindex="-1" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить операцию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Тип операции</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="transactionType" id="expenseRadio" checked="">
+                                <label class="form-check-label" for="expenseRadio">Расход</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="transactionType" id="incomeRadio">
+                                <label class="form-check-label" for="incomeRadio">Доход</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Сумма</label>
+                            <input type="number" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select class="form-select">
+                                <option>Продукты</option>
+                                <option>Транспорт</option>
+                                <option>Кафе и рестораны</option>
+                                <option>ЖКХ</option>
+                                <option>Развлечения</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Дата</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Описание</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления категории -->
+    <div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить категорию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Название категории</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Тип</label>
+                            <select class="form-select">
+                                <option>Расход</option>
+                                <option>Доход</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Иконка</label>
+                            <select class="form-select">
+                                <option>🍔 Продукты</option>
+                                <option>🚕 Транспорт</option>
+                                <option>☕ Кафе</option>
+                                <option>🏠 ЖКХ</option>
+                                <option>🎬 Развлечения</option>
+                                <option>💊 Здоровье</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Цвет</label>
+                            <input type="color" class="form-control form-control-color" value="#563d7c">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+        // Переключение между вкладками
+        document.getElementById('dashboard-tab').addEventListener('click', function(e) {
+            e.preventDefault();
+            showTab('dashboard');
+        });
+        document.getElementById('history-tab').addEventListener('click', function(e) {
+            e.preventDefault();
+            showTab('history');
+        });
+        document.getElementById('categories-tab').addEventListener('click', function(e) {
+            e.preventDefault();
+            showTab('categories');
+        });
+        document.getElementById('analytics-tab').addEventListener('click', function(e) {
+            e.preventDefault();
+            showTab('analytics');
+        });
+
+        function showTab(tabName) {
+            // Скрыть все вкладки
+            document.getElementById('dashboard-content').style.display = 'none';
+            document.getElementById('history-content').style.display = 'none';
+            document.getElementById('categories-content').style.display = 'none';
+            document.getElementById('analytics-content').style.display = 'none';
+
+            // Показать выбранную вкладку
+            document.getElementById(tabName + '-content').style.display = 'block';
+
+            // Обновить активную вкладку в навигации
+            document.querySelectorAll('.nav-link').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Показать/скрыть фильтр в истории операций
+        document.getElementById('filter-transactions').addEventListener('click', function() {
+            const filterSection = document.getElementById('filter-section');
+            filterSection.style.display = filterSection.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Модальные окна
+        const transactionModal = new bootstrap.Modal(document.getElementById('transactionModal'));
+        const categoryModal = new bootstrap.Modal(document.getElementById('categoryModal'));
+
+        document.getElementById('add-transaction').addEventListener('click', function() {
+            transactionModal.show();
+        });
+
+        document.getElementById('add-category').addEventListener('click', function() {
+            categoryModal.show();
+        });
+        // Инициализация графиков
+        function initCharts() {
+            // Круговая диаграмма категорий
+            const categoriesCtx = document.getElementById('categoriesChart').getContext('2d');
+            new Chart(categoriesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Продукты', 'Транспорт', 'Кафе', 'ЖКХ', 'Развлечения', 'Другое'],
+                    datasets: [{
+                        data: [1250, 450, 850, 12000, 1500, 500],
+                        backgroundColor: [
+                            '#21013f',
+                            'blueviolet',
+                            '#390668',
+                            '#9e56bf',
+                            '#9966ff',
+                            '#7200a3'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Линейный график расходов
+            const expensesCtx = document.getElementById('expensesChart').getContext('2d');
+            new Chart(expensesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
+                    datasets: [{
+                        label: 'Расходы',
+                        data: [15000, 14000, 16000, 15500, 17000, 16500],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+
+            // График для статистики по категории
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр'],
+                    datasets: [{
+                        label: 'Продукты',
+                        data: [2800, 2950, 3100, 1250],
+                        backgroundColor: '#ff6384'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Аналитика - круговая диаграмма
+            const analyticsPieCtx = document.getElementById('analyticsPieChart').getContext('2d');
+            new Chart(analyticsPieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Продукты', 'Транспорт', 'Кафе', 'ЖКХ', 'Развлечения', 'Другое'],
+                    datasets: [{
+                        data: [1250, 450, 850, 12000, 1500, 500],
+                        backgroundColor: [
+                            '#ff6384',
+                            '#36a2eb',
+                            '#ffce56',
+                            '#4bc0c0',
+                            '#9966ff',
+                            '#ff9f40'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+
+            // Аналитика - линейный график
+            const analyticsLineCtx = document.getElementById('analyticsLineChart').getContext('2d');
+            new Chart(analyticsLineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1 апр', '5 апр', '10 апр', '15 апр', '20 апр', '25 апр', '30 апр'],
+                    datasets: [
+                        {
+                            label: 'Продукты',
+                            data: [0, 0, 0, 1250, 0, 0, 0],
+                            borderColor: '#ff6384',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Транспорт',
+                            data: [0, 450, 0, 0, 0, 0, 0],
+                            borderColor: '#36a2eb',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Кафе',
+                            data: [0, 0, 850, 0, 0, 0, 0],
+                            borderColor: '#ffce56',
+                            backgroundColor: 'rgba(255, 206, 86, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Аналитика - столбчатая диаграмма
+            const analyticsBarCtx = document.getElementById('analyticsBarChart').getContext('2d');
+            new Chart(analyticsBarCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Продукты', 'Транспорт', 'Кафе', 'ЖКХ', 'Развлечения'],
+                    datasets: [
+                        {
+                            label: 'Март',
+                            data: [3100, 1200, 950, 12000, 1800],
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                        },
+                        {
+                            label: 'Апрель',
+                            data: [1250, 450, 850, 12000, 1500],
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Инициализация при загрузке страницы
+        window.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+        });
+    </script>
+
+</body></html>
