@@ -23,19 +23,18 @@ namespace FinanceApp.Controllers
             _signInManager = signInManager;
             _configuration = configuration;
         }
-
-        // Регистрация нового пользователя
+        // Регистрация пользователя
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             var user = new User
             {
-                UserName = model.Email, // Используем email как UserName
+                UserName = model.Email, 
                 Email = model.Email,
-                Login = model.Login, // Добавляем логин
-                FirstName = model.FirstName, // Добавляем имя
-                LastName = model.LastName, // Добавляем фамилию
-                Balance = 0 // Устанавливаем начальный баланс
+                Login = model.Login,
+                Name = model.Name,
+                Surname = model.Surname, 
+                Balance = 0 
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -57,6 +56,7 @@ namespace FinanceApp.Controllers
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -77,7 +77,7 @@ namespace FinanceApp.Controllers
             });
         }
 
-        // Получение информации о пользователе
+        // Получение данных профиля
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
@@ -90,26 +90,26 @@ namespace FinanceApp.Controllers
             return Ok(new
             {
                 Login = user.Login,
+                Surname = user.Surname,
+                Name = user.Name,
                 Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Balance = user.Balance // Если баланс реализован
+                Balance = user.Balance 
             });
         }
     }
 
     public class RegisterModel
     {
-        public string Login { get; set; } // Логин
-        public string Email { get; set; } // Email
-        public string Password { get; set; } // Пароль
-        public string FirstName { get; set; } // Имя
-        public string LastName { get; set; } // Фамилия
+        public string Login { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 
     public class LoginModel
     {
-        public string Login { get; set; } // Логин
-        public string Password { get; set; } // Пароль
+        public string Login { get; set; }
+        public string Password { get; set; }
     }
 }

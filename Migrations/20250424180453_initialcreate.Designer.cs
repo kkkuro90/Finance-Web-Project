@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250424173137_initialcreate")]
+    [Migration("20250424180453_initialcreate")]
     partial class initialcreate
     {
         /// <inheritdoc />
@@ -102,14 +102,6 @@ namespace FinanceApp.Migrations
                     b.Property<int?>("FamilyGroupId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -117,6 +109,10 @@ namespace FinanceApp.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -138,6 +134,10 @@ namespace FinanceApp.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
