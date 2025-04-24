@@ -58,6 +58,7 @@ body {
     font-size: 1.5rem; 
     font-weight: 600; 
     margin-bottom: 0.7rem;
+    
 }
 .h3{ 
     font-size: 1rem; 
@@ -78,6 +79,7 @@ body {
     font-size: 1.1rem; 
     cursor: pointer; 
     text-decoration: none; 
+    margin-bottom: 1rem; 
 } 
 .features { 
     display: flex; 
@@ -131,14 +133,6 @@ body {
     opacity: 0.8; 
 } 
 
-
-/* ОНО ТУТА */
-/* ОНО ТУТА */
-/* ОНО ТУТА */
-/* ОНО ТУТА */
-/* ОНО ТУТА */
-/* ОНО ТУТА */
-/* ОНО ТУТА */
 .form-group input { 
     width: 100%; 
     padding: 0.8rem; 
@@ -299,7 +293,7 @@ html {
 
 .sidebar {
     min-height: 100vh;
-    background-color: rgba(27, 22, 29, 0.8); /* 1B161D с прозрачностью 80% */
+    background-color: rgba(27, 22, 29, 0.8); 
     padding-top: 20px;
     position: fixed; 
     top: 0;            
@@ -408,12 +402,15 @@ html {
 
 .settings-modal {
     display: none; 
-    background: #18181ab3; 
+    background: #18181a; 
     border-radius: 1rem; 
     padding: 2rem; 
     width: 400px; 
     opacity: 0.9; 
-    box-shadow: 0 8px 32px 0 #1f268726; 
+    position: fixed; 
+    height: 85%;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .modal-content {
@@ -437,4 +434,15 @@ html {
     top: 1rem;
     right: 1rem;
     font-size: 1.5rem;
+}
+
+.add-source {
+    background: transparent;
+    border: 1px solid white; 
+    width: 100%;
+}
+
+.delete-account {
+    background-color: #DD0E50; 
+    width: 100%;
 }
