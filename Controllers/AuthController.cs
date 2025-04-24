@@ -93,7 +93,7 @@ namespace FinanceApp.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Balance = user.Balance
+                Balance = user.Balance // Если баланс реализован
             });
         }
     }
