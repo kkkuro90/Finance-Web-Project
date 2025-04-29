@@ -8,26 +8,13 @@
 <body>
     <div class="container">
         <div class="col-md-3 col-lg-2 sidebar">
-            <h1 class="text-center mb-4 sidebar-title">Waves</h1>
-            <ul class="nav flex-column">
+            <h1 class="text-center mb-4 sidebar-title">
+                <a href="index.html" style="text-decoration: none; color: #ffffff; ">Waves</a>
+              </h1>
+              <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active sidebar-link" href="#" id="dashboard-tab">
+                    <a class="nav-link active sidebar-link" href="dashboard.html" id="dashboard-tab">
                         <i class="bi bi-speedometer2 me-2"></i> Дашборд
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link sidebar-link" href="#" id="history-tab">
-                        <i class="bi bi-clock-history me-2"></i> История
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link sidebar-link" href="#" id="categories-tab">
-                        <i class="bi bi-tags me-2"></i> Категория
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link sidebar-link" href="#" id="analytics-tab">
-                        <i class="bi bi-graph-up me-2"></i> Финансовый обзор
                     </a>
                 </li>
                 <li class="nav-item">
@@ -94,15 +81,18 @@
 
     <script>
         function toggleSettings() {
-            const profileInfo = document.getElementById('profileInfo');
             const settingsModal = document.getElementById('settingsModal');
 
-            if (profileInfo.style.display === 'none') {
-                profileInfo.style.display = 'block';
-                settingsModal.style.display = 'none';
+            if (settingsModal.classList.contains('active')) {
+                settingsModal.classList.remove('active');
+                setTimeout(() => {
+                    settingsModal.style.display = 'none';
+                }, 300); 
             } else {
-                profileInfo.style.display = 'none';
                 settingsModal.style.display = 'flex';
+                setTimeout(() => {
+                    settingsModal.classList.add('active');
+                }, 10); 
             }
         }
     </script>
