@@ -1,0 +1,19 @@
+# Ignore build results
+[Bb]in/
+[Oo]bj/
+
+# Ignore user-specific files
+*.user
+*.suo
+.vs/
+
+# Ignore secrets
+appsettings.json
+secrets.json
+
+# Ignore NuGet packages
+*.nupkg
+**/[Pp]ackages/*
+
+# Ignore logs
+*.log
