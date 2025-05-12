@@ -1,8 +1,8 @@
-﻿using FinanceApp.Models;
+﻿using backend.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinanceApp.Data
+namespace backend.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
@@ -10,7 +10,6 @@ namespace FinanceApp.Data
             : base(options)
         {
         }
-
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<FamilyGroup> FamilyGroups { get; set; }
 

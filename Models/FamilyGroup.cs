@@ -1,4 +1,4 @@
-﻿namespace FinanceApp.Models
+﻿namespace backend.Models
 {
     public class FamilyGroup
     {
