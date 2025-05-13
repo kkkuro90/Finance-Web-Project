@@ -1,0 +1,51 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - finance-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=financeapp;Username=financeuser;Password=financepass
+      - Jwt__Key=XrauPegNkySthptNFDQIfQQbaoMPcVnY
+      - Jwt__Issuer=finance-app
+      - Jwt__Audience=finance-app-client
+      - Jwt__ExpiresInHours=24
+    depends_on:
+      - db
+    networks:
+      - finance-network
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_DB=financeapp
+      - POSTGRES_USER=financeuser
+      - POSTGRES_PASSWORD=financepass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - finance-network
+
+volumes:
+  pgdata:
+
+networks:
+  finance-network:
+    driver: bridge
