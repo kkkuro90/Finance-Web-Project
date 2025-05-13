@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5001/api"; // Замените на ваш порт, если другой
+const API_URL = "/api"; 
 
 // 1. Баланс и суммы
 async function loadBalance() {
