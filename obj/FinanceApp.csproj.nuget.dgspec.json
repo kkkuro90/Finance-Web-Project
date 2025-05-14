@@ -1,0 +1,58 @@
+{
+  "format": 1,
+  "restore": {
+    "Z:\\FinanceApp_Fullstack\\backend\\FinanceApp.csproj": {}
+  },
+  "projects": {
+    "Z:\\FinanceApp_Fullstack\\backend\\FinanceApp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "Z:\\FinanceApp_Fullstack\\backend\\FinanceApp.csproj",
+        "projectName": "FinanceApp",
+        "projectPath": "Z:\\FinanceApp_Fullstack\\backend\\FinanceApp.csproj",
+        "packagesPath": "C:\\Users\\nikpr\\.nuget\\packages\\",
+        "outputPath": "Z:\\FinanceApp_Fullstack\\backend\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\nikpr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
