@@ -9,6 +9,7 @@
             min-height: 100vh;
             background-color: #34065ffa;
             padding-top: 20px;
+            transition: all 0.3s ease;
         }
         .main-content {
             flex: 1;

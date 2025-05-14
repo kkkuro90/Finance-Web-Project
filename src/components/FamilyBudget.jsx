@@ -1,4 +1,4 @@
-// FamilyBudget.jsx (новая страница)
+// FamilyBudget.jsx (обновленная страница)
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,11 +18,39 @@ const FamilyBudget = () => {
   
   // Данные операций
   const [transactions, setTransactions] = useState([
-    { id: 1, date: '15.04.2025', category: 'Продукты', amount: -1250, member: 'Мария Петрова', description: 'Магнит' },
-    { id: 2, date: '10.04.2025', category: 'Коммунальные услуги', amount: -8720, member: 'Иван Петров', description: 'Оплата за кв.' },
-    { id: 3, date: '08.04.2025', category: 'Транспорт', amount: -500, member: 'Павел Петров', description: 'Такси' },
-    { id: 4, date: '06.04.2025', category: 'Развлечения', amount: -750, member: 'Елена Петрова', description: 'Кино' }
-  ]);
+  { 
+    id: 1, 
+    date: '15.04.2025', 
+    category: 'Продукты', 
+    amount: -1250, 
+    member: 'Мария Петрова', 
+    description: 'Магнит',
+  },
+  { 
+    id: 2, 
+    date: '10.04.2025', 
+    category: 'Коммунальные услуги', 
+    amount: -8720, 
+    member: 'Иван Петров', 
+    description: 'Оплата за кв.',
+  },
+  { 
+    id: 3, 
+    date: '08.04.2025', 
+    category: 'Транспорт', 
+    amount: -500, 
+    member: 'Павел Петров', 
+    description: 'Такси',
+  },
+  { 
+    id: 4, 
+    date: '06.04.2025', 
+    category: 'Развлечения', 
+    amount: -750, 
+    member: 'Елена Петрова', 
+    description: 'Кино',
+  }
+]);
 
   // Форматирование суммы
   const formatAmount = (amount) => {
@@ -38,10 +66,148 @@ const FamilyBudget = () => {
         <button 
           style={{ backgroundColor: '#5b248f' }} 
           className="btn btn-primary"
-          onClick={() => navigate('/shared-access')}
+          onClick={() => navigate('/shared')}
         >
           Совместный доступ
         </button>
+      </div>
+
+      {/* Последние операции - мобильная версия */}
+      <div className="card mb-4 d-block d-lg-none" style={{ backgroundColor: '#390668' }}>
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <h2 style={{ color: 'white' }}>Последние операции</h2>
+          <div className="d-flex gap-2">
+            <button 
+              style={{ backgroundColor: '#5b248f' }} 
+              className="btn btn-primary btn-sm"
+              onClick={() => setShowAddIncomeModal(true)}
+            >
+              Доход
+            </button>
+            <button 
+              style={{ backgroundColor: '#5b248f' }} 
+              className="btn btn-primary btn-sm"
+              onClick={() => setShowAddExpenseModal(true)}
+            >
+              Расход
+            </button>
+          </div>
+        </div>
+        <div className="card-body p-0">
+          <div className="list-group list-group-flush">
+            {transactions.map((transaction) => (
+              <div 
+                key={transaction.id} 
+                className="list-group-item"
+                style={{ 
+                  backgroundColor: '#47444D',
+                  borderLeft: `4px solid ${transaction.amount >= 0 ? '#2ecc71' : '#e74c3c'}`,
+                  color: 'white'
+                }}
+              >
+                <div className="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h6 style={{ color: 'white', marginBottom: '4px' }}>{transaction.category}</h6>
+                    <p style={{ color: '#adb5bd', marginBottom: '4px', fontSize: '14px' }}>
+                      {transaction.description}
+                    </p>
+                    <div className="d-flex align-items-center gap-2">
+                      <small style={{ color: '#adb5bd' }}>{transaction.date}</small>
+                      <small style={{ color: '#adb5bd' }}>{transaction.member}</small>
+                    </div>
+                  </div>
+                  <span style={{ 
+                    color: transaction.amount >= 0 ? 'lightgreen' : 'lightcoral',
+                    fontWeight: 'bold',
+                    fontSize: '16px'
+                  }}>
+                    {formatAmount(transaction.amount)}
+                  </span>
+                </div>
+                
+                <div className="d-flex gap-2 mt-3">
+                  <button 
+                    style={{ backgroundColor: '#615e68', color: 'white' }} 
+                    className="btn btn-sm flex-grow-1"
+                  >
+                    Повторить
+                  </button>
+                  <button 
+                    style={{ backgroundColor: '#615e68', color: 'white' }} 
+                    className="btn btn-sm flex-grow-1"
+                  >
+                    Изменить
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Участники - мобильная версия */}
+      <div className="card d-block d-lg-none" style={{ backgroundColor: '#390668' }}>
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <h2 style={{ color: 'white' }}>Участники</h2>
+          <button 
+            style={{ backgroundColor: '#5b248f' }} 
+            className="btn btn-primary btn-sm"
+            onClick={() => setShowAddMemberModal(true)}
+          >
+            Добавить
+          </button>
+        </div>
+        <div className="card-body p-0">
+          <div className="list-group list-group-flush">
+            {members.map((member) => (
+              <div 
+                key={member.id} 
+                className="list-group-item"
+                style={{ 
+                  backgroundColor: '#47444D',
+                  color: 'white'
+                }}
+              >
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center gap-3">
+                    <div 
+                      className="avatar-sm d-flex align-items-center justify-content-center rounded-circle" 
+                      style={{ 
+                        backgroundColor: '#5b248f', 
+                        width: '40px', 
+                        height: '40px',
+                        fontSize: '16px'
+                      }}
+                    >
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div>
+                      <h6 style={{ color: 'white', marginBottom: '4px' }}>{member.name}</h6>
+                      <span className={`badge ${member.role === 'Администратор' ? 'bg-primary' : 'bg-secondary'}`}>
+                        {member.role}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="d-flex gap-2 mt-3">
+                  <button 
+                    style={{ backgroundColor: '#615e68', color: 'white' }} 
+                    className="btn btn-sm flex-grow-1"
+                  >
+                    Изменить
+                  </button>
+                  <button 
+                    style={{ backgroundColor: '#615e68', color: 'white' }} 
+                    className="btn btn-sm flex-grow-1"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="card mb-4" style={{ backgroundColor: '#390668' }}>
@@ -72,7 +238,7 @@ const FamilyBudget = () => {
         </div>
       </div>
 
-      <div className="card mb-4" style={{ backgroundColor: '#390668' }}>
+      <div className="card mb-4 d-none d-lg-block" style={{ backgroundColor: '#390668' }}>
         <div className="card-header d-flex justify-content-between align-items-center">
           <h2 style={{ color: 'white' }}>Последние операции</h2>
           <div>
@@ -94,36 +260,36 @@ const FamilyBudget = () => {
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table" style={{ color: 'white' }}>
+            <table className="table" style={{ color: 'white'}}>
               <thead>
                 <tr>
-                  <th>Дата</th>
-                  <th>Категория</th>
-                  <th>Сумма</th>
-                  <th>Участник</th>
-                  <th>Описание</th>
-                  <th>Действия</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Дата</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Категория</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Сумма</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Участник</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Описание</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Действия</th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.map((transaction) => (
-                  <tr key={transaction.id}>
-                    <td>{transaction.date}</td>
-                    <td>{transaction.category}</td>
-                    <td style={{ color: transaction.amount < 0 ? 'lightcoral' : 'lightgreen' }}>
+                  <tr key={transaction.id} style={{backgroundColor: '#47444D'}}>
+                    <td style={{color: 'white', backgroundColor: '#47444D'}}>{transaction.date}</td>
+                    <td style={{color: 'white', backgroundColor: '#47444D'}}>{transaction.category}</td>
+                    <td style={{ color: transaction.amount < 0 ? 'lightcoral' : 'lightgreen', backgroundColor: '#47444D' }}>
                       {formatAmount(transaction.amount)}
                     </td>
-                    <td>{transaction.member}</td>
-                    <td>{transaction.description}</td>
-                    <td>
+                    <td style={{color: 'white', backgroundColor: '#47444D'}}>{transaction.member}</td>
+                    <td style={{color: 'white', backgroundColor: '#47444D'}}>{transaction.description}</td>
+                    <td style={{color: 'white', backgroundColor: '#47444D'}}>
                       <button 
-                        style={{ backgroundColor: '#615e68', marginRight: '5px' }} 
+                        style={{ backgroundColor: '#615e68', marginRight: '5px', color: 'white' }} 
                         className="btn btn-sm"
                       >
                         Повторить
                       </button>
                       <button 
-                        style={{ backgroundColor: '#615e68' }} 
+                        style={{ backgroundColor: '#615e68', color: 'white' }} 
                         className="btn btn-sm"
                       >
                         Изменить
@@ -137,7 +303,7 @@ const FamilyBudget = () => {
         </div>
       </div>
 
-      <div className="card" style={{ backgroundColor: '#390668' }}>
+      <div className="card mb-4 d-none d-lg-block" style={{ backgroundColor: '#390668' }}>
         <div className="card-header d-flex justify-content-between align-items-center">
           <h2 style={{ color: 'white' }}>Участники</h2>
           <button 
@@ -153,25 +319,25 @@ const FamilyBudget = () => {
             <table className="table" style={{ color: 'white' }}>
               <thead>
                 <tr>
-                  <th>Имя</th>
-                  <th>Роль</th>
-                  <th>Действия</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Имя</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Роль</th>
+                  <th style={{backgroundColor: '#34065FFA', color: 'white'}}>Действия</th>
                 </tr>
               </thead>
               <tbody>
                 {members.map((member) => (
-                  <tr key={member.id}>
-                    <td>{member.name}</td>
-                    <td>{member.role}</td>
-                    <td>
+                  <tr key={member.id} style={{backgroundColor: '#34065FFA'}}>
+                    <td style={{backgroundColor: '#47444D', color: 'white'}}>{member.name}</td>
+                    <td style={{backgroundColor: '#47444D', color: 'white'}}>{member.role}</td>
+                    <td style={{backgroundColor: '#47444D'}}>
                       <button 
-                        style={{ backgroundColor: '#615e68', marginRight: '5px' }} 
+                        style={{ backgroundColor: '#615e68', marginRight: '5px', color: 'white' }} 
                         className="btn btn-sm"
                       >
                         Изменить роль
                       </button>
                       <button 
-                        style={{ backgroundColor: '#615e68' }} 
+                        style={{ backgroundColor: '#615e68', color: 'white' }} 
                         className="btn btn-sm"
                       >
                         Удалить

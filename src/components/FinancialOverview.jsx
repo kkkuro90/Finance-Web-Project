@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 const FinancialOverview = () => {
   const [budgets, setBudgets] = useState([
@@ -10,45 +11,97 @@ const FinancialOverview = () => {
     { name: 'Здоровье', budget: 3000, spent: 1200 }
   ]);
 
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
   const handleBudgetUpdate = (index, newBudget) => {
     const updatedBudgets = [...budgets];
     updatedBudgets[index].budget = newBudget;
     setBudgets(updatedBudgets);
   };
 
+  // Форматирование чисел с разделителями
+  const formatNumber = (num) => new Intl.NumberFormat('ru-RU').format(num);
+
   return (
-    <div className="col-md-9 col-lg-10 main-content">
+    <div className={`${isMobile ? 'col-12' : 'col-md-9 col-lg-10'} main-content`}>
       <div id="dashboard-content">
-        <h1 style={{ color: 'white', fontSize: '275%' }}>Мой бюджет</h1>
+        <h1 style={{ color: 'white', fontSize: isMobile ? '24px' : '32px' }}>Мой бюджет</h1>
         
-        <div style={{ backgroundColor: '#390668', width: '95%' }} className="notification alert" id="overbudgetNotification">
-          <span className="notification-icon">⚠️</span>
-          <div style={{ color: 'white', fontSize: 'large' }}>Вы превысили бюджет в 2 категориях!</div>
+        {/* Уведомление о превышении бюджета */}
+        <div 
+          style={{ 
+            backgroundColor: '#390668', 
+            width: isMobile ? '100%' : '95%',
+            padding: '12px',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            marginBottom: '20px'
+          }} 
+          className="alert"
+        >
+          <span style={{ fontSize: '20px' }}>⚠️</span>
+          <div style={{ color: 'white', fontSize: isMobile ? '14px' : '16px' }}>
+            Вы превысили бюджет в 2 категориях!
+          </div>
         </div>
         
-        <div className="budget-summary" style={{ backgroundColor: '#390668', display: 'flex', gap: '16px', padding: '16px' }}>
-          <div className="summary-item" style={{ backgroundColor: '#5b248f', color: 'white', padding: '12px', borderRadius: '8px', textAlign: 'center', flex: 1 }}>
-            <div style={{ fontSize: '150%' }}>Общий бюджет</div>
-            <div className="summary-value" style={{ fontSize: '1.5rem', margin: '8px 0' }}>45,000 ₽</div>
-            <div style={{ fontSize: '115%' }}>на апрель</div>
-          </div>
-          <div className="summary-item" style={{ backgroundColor: '#5b248f', color: 'white', padding: '12px', borderRadius: '8px', textAlign: 'center', flex: 1 }}>
-            <div style={{ fontSize: '150%' }}>Потрачено</div>
-            <div className="summary-value" style={{ fontSize: '1.5rem', margin: '8px 0' }}>38,200 ₽</div>
-            <div style={{ fontSize: '115%' }}>85% от бюджета</div>
-          </div>
-          <div className="summary-item" style={{ backgroundColor: '#5b248f', color: 'white', padding: '12px', borderRadius: '8px', textAlign: 'center', flex: 1 }}>
-            <div style={{ fontSize: '150%' }}>Остаток</div>
-            <div className="summary-value" style={{ fontSize: '1.5rem', margin: '8px 0' }}>6,800 ₽</div>
-            <div style={{ fontSize: '115%' }}>15% от бюджета</div>
-          </div>
+        {/* Краткая сводка */}
+        <div 
+          style={{ 
+            backgroundColor: '#390668', 
+            display: 'flex', 
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: '16px', 
+            padding: '16px',
+            borderRadius: '8px',
+            marginBottom: '20px'
+          }}
+        >
+          {[
+            { title: 'Общий бюджет', value: 45000, desc: 'на апрель' },
+            { title: 'Потрачено', value: 38200, desc: '85% от бюджета' },
+            { title: 'Остаток', value: 6800, desc: '15% от бюджета' }
+          ].map((item, i) => (
+            <div 
+              key={i}
+              style={{ 
+                backgroundColor: '#5b248f', 
+                color: 'white', 
+                padding: '12px', 
+                borderRadius: '8px', 
+                textAlign: 'center', 
+                flex: 1 
+              }}
+            >
+              <div style={{ fontSize: isMobile ? '16px' : '20px' }}>{item.title}</div>
+              <div style={{ fontSize: isMobile ? '20px' : '24px', margin: '8px 0' }}>
+                {formatNumber(item.value)} ₽
+              </div>
+              <div style={{ fontSize: isMobile ? '14px' : '16px' }}>{item.desc}</div>
+            </div>
+          ))}
         </div>
       </div>
       
-      <div style={{ backgroundColor: '#390668' }} className="card">
-        <h2 style={{ color: 'white', paddingLeft: '2rem' }}>Категории расходов</h2>
+      {/* Категории расходов */}
+      <div 
+        style={{ 
+          backgroundColor: '#390668', 
+          padding: isMobile ? '16px' : '24px',
+          borderRadius: '8px'
+        }}
+      >
+        <h2 style={{ color: 'white', marginBottom: '20px' }}>Категории расходов</h2>
       
-        <div style={{ backgroundColor: '#390668', color: 'white' }} className="budget-categories">
+        <div 
+          style={{ 
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '16px'
+          }}
+        >
           {budgets.map((category, index) => {
             const percentage = Math.min(100, (category.spent / category.budget) * 100);
             const isOverbudget = category.spent > category.budget;
@@ -58,57 +111,99 @@ const FinancialOverview = () => {
               <div 
                 key={index}
                 style={{ 
-                  backgroundColor: '#5b248f', 
-                  width: '28.5rem', 
-                  marginLeft: index % 3 === 1 ? '200px' : index % 3 === 2 ? '400px' : '0',
-                  marginBottom: '20px'
+                  backgroundColor: '#5b248f',
+                  padding: '16px',
+                  borderRadius: '8px'
                 }} 
-                className={`category-card ${isOverbudget ? 'overbudget' : ''}`}
               >
-                <div className="category-header">
-                  <span className="category-name">{category.name}</span>
-                  <span className="category-budget">
-                    {new Intl.NumberFormat('ru-RU').format(category.budget)} ₽
+                <div 
+                  style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between',
+                    marginBottom: '10px'
+                  }}
+                >
+                  <span style={{ color: 'white', fontWeight: '500' }}>{category.name}</span>
+                  <span style={{ color: 'white' }}>
+                    {formatNumber(category.budget)} ₽
                   </span>
                 </div>
-                <div style={{ backgroundColor: '#390668' }} className="progress-container">
+                
+                {/* Прогресс-бар */}
+                <div 
+                  style={{ 
+                    height: '8px',
+                    backgroundColor: '#390668',
+                    borderRadius: '4px',
+                    marginBottom: '8px',
+                    overflow: 'hidden'
+                  }}
+                >
                   <div 
-                    className="progress-bar" 
                     style={{ 
                       width: `${isOverbudget ? 100 + (percentage - 100) : percentage}%`, 
-                      backgroundColor: isOverbudget ? 'red' : 'blueviolet'
+                      height: '100%',
+                      backgroundColor: isOverbudget ? '#e74c3c' : '#9b59b6'
                     }}
                   ></div>
                 </div>
-                <div className="category-details">
-                  <span className="category-spent">
-                    {new Intl.NumberFormat('ru-RU').format(category.spent)} ₽
+                
+                <div 
+                  style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between',
+                    fontSize: '14px',
+                    marginBottom: '12px'
+                  }}
+                >
+                  <span style={{ color: 'white' }}>
+                    {formatNumber(category.spent)} ₽
                   </span>
                   {isOverbudget ? (
-                    <span className="category-over">
-                      +{new Intl.NumberFormat('ru-RU').format(category.spent - category.budget)} ₽
+                    <span style={{ color: '#e74c3c' }}>
+                      +{formatNumber(category.spent - category.budget)} ₽
                     </span>
                   ) : (
-                    <span className="category-remaining">
-                      {new Intl.NumberFormat('ru-RU').format(remaining)} ₽ осталось
+                    <span style={{ color: '#2ecc71' }}>
+                      {formatNumber(remaining)} ₽ осталось
                     </span>
                   )}
                 </div>
-                <div className="budget-form">
+                
+                {/* Форма изменения бюджета */}
+                <div 
+                  style={{ 
+                    display: 'flex',
+                    gap: '8px'
+                  }}
+                >
                   <input 
                     type="number" 
-                    className="budget-input" 
+                    style={{ 
+                      flex: 1,
+                      backgroundColor: '#390668',
+                      color: 'white',
+                      border: '1px solid #615e68',
+                      borderRadius: '4px',
+                      padding: '8px',
+                      fontSize: '14px'
+                    }}
                     placeholder="Новый бюджет" 
                     value={category.budget}
                     onChange={(e) => {
                       const newBudget = parseInt(e.target.value) || 0;
-                      const updatedBudgets = [...budgets];
-                      updatedBudgets[index].budget = newBudget;
-                      setBudgets(updatedBudgets);
+                      handleBudgetUpdate(index, newBudget);
                     }}
                   />
                   <button 
-                    className="save-btn"
+                    style={{ 
+                      backgroundColor: '#2ecc71',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      padding: '0 12px',
+                      cursor: 'pointer'
+                    }}
                     onClick={() => handleBudgetUpdate(index, category.budget)}
                   >
                     ✓

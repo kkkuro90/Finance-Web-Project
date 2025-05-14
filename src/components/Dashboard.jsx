@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 const Dashboard = () => {
   const categoriesChartRef = useRef(null);
   const expensesChartRef = useRef(null);
-  const [activeChart, setActiveChart] = useState('categories'); // 'categories' или 'expenses'
+  const [activeChart, setActiveChart] = useState('categories');
   const navigate = useNavigate();
-  
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
-  // Регистрируем необходимые компоненты Chart.js
   Chart.register(...registerables);
 
   useEffect(() => {
@@ -42,11 +42,11 @@ const Dashboard = () => {
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              position: 'bottom',
+              position: isMobile ? 'bottom' : 'right',
               labels: {
                 color: '#ffffff',
                 font: {
-                  size: 14
+                  size: isMobile ? 12 : 14
                 }
               }
             }
@@ -111,102 +111,156 @@ const Dashboard = () => {
       if (categoriesChart) categoriesChart.destroy();
       if (expensesChart) expensesChart.destroy();
     };
-  }, [activeChart]);
+  }, [activeChart, isMobile]);
   
   return (
-    <div className="col-md-9 col-lg-10 main-content">
-      <div id="dashboard-content">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 style={{ color: 'white', fontSize: '275%' }}>Дашборд</h2>
-          <div>
-            <button 
-              style={{ 
-                position: 'absolute', 
-                right: '30rem', 
-                backgroundColor: activeChart === 'categories' ? '#7b2cbf' : '#5b248f' 
-              }} 
-              className="btn btn-primary"
-              onClick={() => setActiveChart('categories')}
-            >
-              Статистика по категориям
-            </button>
-          </div>
-          <div>
-            <button 
-              style={{ 
-                position: 'absolute', 
-                right: '6rem', 
-                width: '14rem', 
-                backgroundColor: activeChart === 'expenses' ? '#7b2cbf' : '#5b248f' 
-              }} 
-              className="btn btn-primary"
-              onClick={() => setActiveChart('expenses')}
-            >
-              Динамика расходов
-            </button>
-          </div>
+    <div className={`${isMobile ? 'col-12' : 'col-md-9 col-lg-10'} main-content`}>
+      <div id="dashboard-content" style={isMobile ? { paddingTop: '60px' } : {}}>
+        {/* Заголовок и кнопки переключения */}
+        <div className={isMobile ? "mb-3" : "d-flex justify-content-between align-items-center mb-4"}>
+          <h2 style={{ color: 'white', fontSize: isMobile ? '200%' : '275%' }}>Дашборд</h2>
+          
+          {isMobile ? (
+            <div className="d-flex flex-wrap gap-2 my-3">
+              <button 
+                className="btn btn-primary flex-grow-1"
+                style={{ 
+                  backgroundColor: activeChart === 'categories' ? '#7b2cbf' : '#5b248f',
+                  fontSize: '14px'
+                }}
+                onClick={() => setActiveChart('categories')}
+              >
+                Категории
+              </button>
+              <button 
+                className="btn btn-primary flex-grow-1"
+                style={{ 
+                  backgroundColor: activeChart === 'expenses' ? '#7b2cbf' : '#5b248f',
+                  fontSize: '14px'
+                }}
+                onClick={() => setActiveChart('expenses')}
+              >
+                Динамика
+              </button>
+            </div>
+          ) : (
+            <>
+              <button 
+                className="btn btn-primary"
+                style={{ 
+                  backgroundColor: activeChart === 'categories' ? '#7b2cbf' : '#5b248f',
+
+                }}
+                onClick={() => setActiveChart('categories')}
+              >
+                Статистика по категориям
+              </button>
+              <button 
+                className="btn btn-primary"
+                style={{ 
+                  backgroundColor: activeChart === 'expenses' ? '#7b2cbf' : '#5b248f',
+
+                }}
+                onClick={() => setActiveChart('expenses')}
+              >
+                Динамика расходов
+              </button>
+            </>
+          )}
         </div>
 
+        {/* Основной контент в две колонки на ПК */}
         <div className="row">
+          {/* Колонка с быстрыми действиями и операциями */}
           <div className="col-md-6">
-            <div style={{ width: '100%' }} className="card">
+            {/* Быстрые действия - теперь всегда 2x2 */}
+            <div className="card mb-4">
               <div className="card-header">
                 <h5 className="card-title">Быстрые действия</h5>
               </div>
               <div style={{ backgroundColor: '#390668' }} className="card-body">
-                <button 
-                  style={{ width: '48.5%', color: 'white', backgroundColor: 'rgba(139, 71, 184, 0.575)' }} 
-                  className="btn btn-outline-primary me-2 mb-2"
-                  onClick={() => navigate('/history')}
-                >
-                  Повторить платеж
-                </button>
-                <button 
-                  style={{ width: '48.5%', color: 'white', backgroundColor: 'rgba(139, 71, 184, 0.575)' }} 
-                  className="btn btn-outline-success me-2 mb-2"
-                  onClick={() => navigate('/history')}
-                >
-                  Добавить доход
-                </button>
-                <button 
-                  style={{ width: '48.5%', color: 'white', backgroundColor: 'rgba(139, 71, 184, 0.575)' }} 
-                  className="btn btn-outline-danger me-2 mb-2"
-                  onClick={() => navigate('/history')}
-                >
-                  Добавить расход
-                </button>
-                <button 
-                  style={{ width: '48.5%', color: 'white', backgroundColor: 'rgba(139, 71, 184, 0.575)' }} 
-                  className="btn btn-outline-secondary mb-2"
-                >
-                  Экспорт данных
-                </button>
+                <div className="row g-2">
+                  <div className="col-6">
+                    <button 
+                      style={{ 
+                        width: '100%', 
+                        color: 'white', 
+                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
+                        marginBottom: '10px'
+                      }} 
+                      className="btn"
+                      onClick={() => navigate('/history')}
+                    >
+                      {isMobile ? 'Повторить' : 'Повторить платеж'}
+                    </button>
+                  </div>
+                  <div className="col-6">
+                    <button 
+                      style={{ 
+                        width: '100%', 
+                        color: 'white', 
+                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
+                        marginBottom: '10px'
+                      }} 
+                      className="btn"
+                      onClick={() => navigate('/history')}
+                    >
+                      {isMobile ? 'Доход' : 'Добавить доход'}
+                    </button>
+                  </div>
+                  <div className="col-6">
+                    <button 
+                      style={{ 
+                        width: '100%', 
+                        color: 'white', 
+                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
+                        marginBottom: '10px'
+                      }} 
+                      className="btn"
+                      onClick={() => navigate('/history')}
+                    >
+                      {isMobile ? 'Расход' : 'Добавить расход'}
+                    </button>
+                  </div>
+                  <div className="col-6">
+                    <button 
+                      style={{ 
+                        width: '100%', 
+                        color: 'white', 
+                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
+                        marginBottom: '10px'
+                      }} 
+                      className="btn"
+                    >
+                      {isMobile ? 'Экспорт' : 'Экспорт данных'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div style={{ width: '100%' }} className="card">
+            {/* Последние операции */}
+            <div className="card">
               <div className="card-header d-flex justify-content-between align-items-center">
                 <h5 className="card-title">Последние операции</h5>
                 <a 
                   style={{ textDecoration: 'none', color: 'white' }} 
                   href="#" 
                   className="small"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
+                  onClick={(e) => e.preventDefault()}
                 >
                   Все операции
                 </a>
               </div>
               <div style={{ backgroundColor: '#390668' }} className="card-body">
-                <div style={{ backgroundColor: 'rgba(139, 71, 184, 0.575)' }} className="transaction-item expense">
+                <div style={{ backgroundColor: 'rgba(139, 71, 184, 0.575)' }} className="transaction-item expense mb-2">
                   <div style={{ color: 'white' }} className="d-flex justify-content-between">
                     <p>Продукты</p>
                     <span className="text-danger">-1,250.00 ₽</span>
                   </div>
                   <small className="text-muted">Магнит, 15 апр 2023</small>
                 </div>
-                <div style={{ backgroundColor: 'rgba(139, 71, 184, 0.575)' }} className="transaction-item income">
+                <div style={{ backgroundColor: 'rgba(139, 71, 184, 0.575)' }} className="transaction-item income mb-2">
                   <div style={{ color: 'white' }} className="d-flex justify-content-between">
                     <p>Зарплата</p>
                     <span className="text-success">+30,000.00 ₽</span>
@@ -224,18 +278,19 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="col-md-6">
+          {/* График */}
+          <div className={isMobile ? "mt-3" : "col-md-6"}>
             <div className="card">
               <div className="card-header">
                 <h5 className="card-title">
                   {activeChart === 'categories' ? 'Статистика по категориям' : 'Динамика расходов'}
                 </h5>
               </div>
-              <div style={{ backgroundColor: '#390668', minHeight: '400px' }} className="card-body">
+              <div style={{ backgroundColor: '#390668', minHeight: isMobile ? '300px' : '400px' }} className="card-body">
                 <div 
                   style={{ 
                     position: 'relative', 
-                    height: '650px', 
+                    height: isMobile ? '350px' : '650px', 
                     display: activeChart === 'categories' ? 'block' : 'none' 
                   }}
                 >
@@ -245,7 +300,7 @@ const Dashboard = () => {
                 <div 
                   style={{ 
                     position: 'relative', 
-                    height: '650px', 
+                    height: isMobile ? '350px' : '650px', 
                     display: activeChart === 'expenses' ? 'block' : 'none' 
                   }}
                 >

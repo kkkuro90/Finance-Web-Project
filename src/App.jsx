@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import Sidebar from './components/Sidebar';
+import MobileSidebar from './components/MobileSidebar/MobileSidebar';
 import Dashboard from './components/Dashboard';
 import History from './components/History';
 import Categories from './components/Categories';
@@ -11,24 +13,35 @@ import FamilyBudget from './components/FamilyBudget';
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const location = useLocation();
-  const navigate = useNavigate();
+  const isMobile = useMediaQuery({ maxWidth: 991 });
 
   // Синхронизация activeTab с URL
   useEffect(() => {
-    const path = location.pathname;
-    if (path === '/dashboard') setActiveTab('dashboard');
-    else if (path === '/history') setActiveTab('history');
-    else if (path === '/categories') setActiveTab('categories');
-    else if (path === '/financial') setActiveTab('financial');
-    else if (path === '/shared') setActiveTab('shared');
-    else if (path === '/family-budget') setActiveTab('family-budget');
+    const path = location.pathname.substring(1); // Убираем первый слэш
+    const validTabs = ['dashboard', 'history', 'categories', 'financial', 'shared', 'family-budget'];
+    
+    if (validTabs.includes(path)) {
+      setActiveTab(path);
+    } else {
+      setActiveTab('dashboard');
+      if (location.pathname !== '/dashboard') {
+        window.history.replaceState(null, '', '/dashboard');
+      }
+    }
   }, [location]);
 
   return (
     <div className="container-fluid">
       <div className="row">
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div className="col-md-9 col-lg-10 main-content">
+        {/* Рендерим соответствующий сайдбар в зависимости от устройства */}
+        {isMobile ? (
+          <MobileSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        ) : (
+          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        )}
+        
+        {/* Основное содержимое с учетом мобильной версии */}
+        <div className={`${isMobile ? 'col-12' : 'col-md-9 col-lg-10'} main-content`}>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/history" element={<History />} />

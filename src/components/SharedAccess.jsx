@@ -3,13 +3,113 @@ import { useNavigate } from 'react-router-dom';
 import EmailInviteModal from './EmailInviteModal';
 import LinkInviteModal from './LinkInviteModal';
 
+// Компонент модального окна подтверждения
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000
+    }}>
+      <div style={{
+        backgroundColor: '#390668',
+        padding: '20px',
+        borderRadius: '8px',
+        maxWidth: '500px',
+        width: '90%',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <h3 style={{ color: 'white', marginBottom: '20px' }}>Подтверждение действия</h3>
+        <p style={{ color: '#adb5bd', marginBottom: '30px' }}>{message}</p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <button 
+            onClick={onClose}
+            style={{
+              backgroundColor: '#615e68',
+              color: 'white',
+              border: 'none',
+              padding: '10px 20px',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Отмена
+          </button>
+          <button 
+            onClick={onConfirm}
+            style={{
+              backgroundColor: '#e74c3c',
+              color: 'white',
+              border: 'none',
+              padding: '10px 20px',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Подтвердить
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SharedAccess = () => {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showLinkModal, setShowLinkModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
+
+  const handleCreateGroup = () => {
+    setShowConfirmModal(true);
+  };
+
+  const confirmCreateGroup = () => {
+    setShowConfirmModal(false);
+    setNotification({
+      message: "Новая группа успешно создана!",
+      type: 'success'
+    });
+  };
 
   return (
     <div className="col-md-9 col-lg-10 main-content">
+      {/* Уведомление */}
+      {notification && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          backgroundColor: notification.type === 'success' ? '#2ecc71' : '#e74c3c',
+          color: 'white',
+          padding: '15px 25px',
+          borderRadius: '4px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+          zIndex: 1000,
+          animation: 'slideIn 0.3s ease-out'
+        }}>
+          {notification.message}
+        </div>
+      )}
+
+      {/* Модальное окно подтверждения */}
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={confirmCreateGroup}
+        message="Вы уверены, что хотите создать новую группу? Текущая группа будет удалена."
+      />
+
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 style={{ color: 'white', fontSize: '260%' }}>Совместный доступ</h2>
         <button 
@@ -28,11 +128,7 @@ const SharedAccess = () => {
             style={{ backgroundColor: '#5b248f' }} 
             className="btn btn-primary" 
             id="createGroupBtn"
-            onClick={() => {
-              if (window.confirm('Вы уверены, что хотите создать новую группу? Текущая группа будет удалена.')) {
-                alert('Новая группа создана!');
-              }
-            }}
+            onClick={handleCreateGroup}
           >
             Создать новую группу
           </button>
