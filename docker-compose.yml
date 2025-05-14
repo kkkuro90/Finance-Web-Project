@@ -1,8 +1,8 @@
+
+
 services:
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    build: ./dashboard
     ports:
       - "3000:80"
     depends_on:
@@ -10,20 +10,27 @@ services:
     networks:
       - finance-network
 
-  backend:
+  fulldashboard:
     build:
-      context: ./backend
+      context: ./fulldashboard
       dockerfile: Dockerfile
     ports:
-      - "5001:5001"
+      - "81:80"
+    depends_on:
+      - backend
+    networks:
+      - finance-network
+
+  backend:
+    build: ./backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5001
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=financeapp;Username=financeuser;Password=financepass
-      - Jwt__Key=XrauPegNkySthptNFDQIfQQbaoMPcVnY
-      - Jwt__Issuer=finance-app
-      - Jwt__Audience=finance-app-client
-      - Jwt__ExpiresInHours=24
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=finance;Username=financeuser;Password=financepass
+      - Jwt__Key=your_jwt_key_here
+      - Jwt__Issuer=http://localhost:5001
+      - Jwt__Audience=http://localhost:5001
+    ports:
+      - "5001:5001"
     depends_on:
       - db
     networks:
@@ -33,9 +40,9 @@ services:
     image: postgres:15
     restart: always
     environment:
-      - POSTGRES_DB=financeapp
-      - POSTGRES_USER=financeuser
-      - POSTGRES_PASSWORD=financepass
+      POSTGRES_DB: finance
+      POSTGRES_USER: financeuser
+      POSTGRES_PASSWORD: financepass
     ports:
       - "5432:5432"
     volumes:
