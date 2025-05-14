@@ -1,68 +1,70 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import Sidebar from './components/Sidebar';
-import MobileSidebar from './components/MobileSidebar/MobileSidebar';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Dashboard from './components/Dashboard';
 import History from './components/History';
 import Categories from './components/Categories';
-import FinancialOverview from './components/FinancialOverview';
-import SharedAccess from './components/SharedAccess';
 import FamilyBudget from './components/FamilyBudget';
+import Sidebar from './components/Sidebar';
+import './App.css';
 
-function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const location = useLocation();
-  const isMobile = useMediaQuery({ maxWidth: 991 });
+// Protected route component
+const ProtectedRoute = ({ children }) => {
+  const { token, loading } = useAuth();
 
-  // Синхронизация activeTab с URL
-  useEffect(() => {
-    const path = location.pathname.substring(1); // Убираем первый слэш
-    const validTabs = ['dashboard', 'history', 'categories', 'financial', 'shared', 'family-budget'];
-    
-    if (validTabs.includes(path)) {
-      setActiveTab(path);
-    } else {
-      setActiveTab('dashboard');
-      if (location.pathname !== '/dashboard') {
-        window.history.replaceState(null, '', '/dashboard');
-      }
-    }
-  }, [location]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
+
+const AppContent = () => {
+  const { user } = useAuth();
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        {/* Рендерим соответствующий сайдбар в зависимости от устройства */}
-        {isMobile ? (
-          <MobileSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        ) : (
-          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        )}
-        
-        {/* Основное содержимое с учетом мобильной версии */}
-        <div className={`${isMobile ? 'col-12' : 'col-md-9 col-lg-10'} main-content`}>
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/financial" element={<FinancialOverview />} />
-            <Route path="/shared" element={<SharedAccess />} />
-            <Route path="/family-budget" element={<FamilyBudget />} />
-            <Route path="*" element={<Dashboard />} />
-          </Routes>
-        </div>
-      </div>
+    <div className="app-container">
+      <Sidebar />
+      <main className="main-content">
+        <Routes>
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/history" element={
+            <ProtectedRoute>
+              <History />
+            </ProtectedRoute>
+          } />
+          <Route path="/categories" element={
+            <ProtectedRoute>
+              <Categories />
+            </ProtectedRoute>
+          } />
+          <Route path="/family" element={
+            <ProtectedRoute>
+              <FamilyBudget />
+            </ProtectedRoute>
+          } />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+        </Routes>
+      </main>
     </div>
   );
-}
+};
 
-function AppWrapper() {
+function App() {
   return (
     <Router>
-      <App />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 }
 
-export default AppWrapper;
+export default App;

@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import EmailInviteModal from './EmailInviteModal';
-import LinkInviteModal from './LinkInviteModal';
+import axios from 'axios';
+// import EmailInviteModal from './EmailInviteModal';
+// import LinkInviteModal from './LinkInviteModal';
+
+const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 // Компонент модального окна подтверждения
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
@@ -64,27 +67,62 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
 };
 
 const SharedAccess = () => {
-  const [showEmailModal, setShowEmailModal] = useState(false);
-  const [showLinkModal, setShowLinkModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const handleCreateGroup = () => {
+  // Загрузка участников семьи
+  useEffect(() => {
+    const fetchMembers = async () => {
+      setLoading(true);
+      try {
+        // Здесь предполагается, что есть endpoint /api/family/members или /api/users
+        const res = await axios.get(`${API_URL}/family/members`);
+        setMembers(res.data);
+      } catch (e) {
+        setNotification({ message: 'Ошибка загрузки участников', type: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMembers();
+  }, []);
+
+  const handleCreateGroup = async () => {
     setShowConfirmModal(true);
   };
 
-  const confirmCreateGroup = () => {
+  const confirmCreateGroup = async () => {
     setShowConfirmModal(false);
-    setNotification({
-      message: "Новая группа успешно создана!",
-      type: 'success'
-    });
+    try {
+      // Здесь предполагается, что есть endpoint для создания новой группы
+      await axios.post(`${API_URL}/family/create`);
+      setNotification({ message: 'Новая группа успешно создана!', type: 'success' });
+      // После создания — перезагрузить участников
+      const res = await axios.get(`${API_URL}/family/members`);
+      setMembers(res.data);
+    } catch (e) {
+      setNotification({ message: 'Ошибка создания группы', type: 'error' });
+    }
   };
 
+  // Удаление участника
+  const handleRemoveMember = async (userId) => {
+    try {
+      await axios.delete(`${API_URL}/family/members/${userId}`);
+      setMembers(members.filter(m => m.id !== userId));
+      setNotification({ message: 'Участник удалён', type: 'success' });
+    } catch (e) {
+      setNotification({ message: 'Ошибка удаления участника', type: 'error' });
+    }
+  };
+
+  if (loading) return <div className="main-content"><div className="loading">Загрузка...</div></div>;
+
   return (
-    <div className="col-md-9 col-lg-10 main-content">
-      {/* Уведомление */}
+    <div className="main-content">
       {notification && (
         <div style={{
           position: 'fixed',
@@ -101,19 +139,15 @@ const SharedAccess = () => {
           {notification.message}
         </div>
       )}
-
-      {/* Модальное окно подтверждения */}
       <ConfirmationModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={confirmCreateGroup}
         message="Вы уверены, что хотите создать новую группу? Текущая группа будет удалена."
       />
-
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 style={{ color: 'white', fontSize: '260%' }}>Совместный доступ</h2>
+        <h2 className="dashboard-title">Совместный доступ</h2>
         <button 
-          style={{ backgroundColor: '#5b248f' }} 
           className="btn btn-primary"
           onClick={() => navigate('/family-budget')}
         >
@@ -123,9 +157,8 @@ const SharedAccess = () => {
       
       <div className="panel">
         <div className="family-header">
-          <div style={{ color: 'white' }} className="family-title">Участники семьи</div>
+          <div className="family-title">Участники семьи</div>
           <button 
-            style={{ backgroundColor: '#5b248f' }} 
             className="btn btn-primary" 
             id="createGroupBtn"
             onClick={handleCreateGroup}
@@ -135,33 +168,15 @@ const SharedAccess = () => {
         </div>
         
         <div className="member-grid">
-          <div className="member-card">
-            <div className="member-avatar">ИП</div>
-            <div className="member-name">Иван Петров</div>
-            <div className="member-email">ivan@example.com</div>
-            <div className="pill owner">Владелец</div>
-          </div>
-          
-          <div className="member-card">
-            <div className="member-avatar">МП</div>
-            <div className="member-name">Мария Петрова</div>
-            <div className="member-email">maria@example.com</div>
-            <div className="pill">Участник</div>
-          </div>
-          
-          <div className="member-card">
-            <div className="member-avatar">АП</div>
-            <div className="member-name">Алексей Петров</div>
-            <div className="member-email">alex@example.com</div>
-            <div className="pill">Участник</div>
-          </div>
-          
-          <div className="member-card">
-            <div className="member-avatar">ЕП</div>
-            <div className="member-name">Елена Петрова</div>
-            <div className="member-email">elena@example.com</div>
-            <div className="pill">Участник</div>
-          </div>
+          {members.map(member => (
+            <div className="member-card" key={member.id}>
+              <div className="member-avatar">{member.name?.[0]}{member.surname?.[0]}</div>
+              <div className="member-name">{member.name} {member.surname}</div>
+              <div className="member-email">{member.email}</div>
+              <div className={member.isOwner ? 'pill owner' : 'pill'}>{member.isOwner ? 'Владелец' : 'Участник'}</div>
+              {!member.isOwner && <button className="btn btn-danger btn-sm mt-2" onClick={() => handleRemoveMember(member.id)}>Удалить</button>}
+            </div>
+          ))}
         </div>
         
         <div style={{ marginTop: '30px' }}>
@@ -175,13 +190,13 @@ const SharedAccess = () => {
         <p>Отправьте приглашение членам семьи, чтобы они могли видеть общие финансы и участвовать в бюджетировании.</p>
         
         <div className="invite-methods">
-          <div className="invite-method" onClick={() => setShowEmailModal(true)}>
+          <div className="invite-method">
             <div className="method-icon">✉️</div>
             <div className="method-title">По электронной почте</div>
             <div className="method-desc">Отправить персональное приглашение на email</div>
           </div>
           
-          <div className="invite-method" onClick={() => setShowLinkModal(true)}>
+          <div className="invite-method">
             <div className="method-icon">🔗</div>
             <div className="method-title">Ссылка для приглашения</div>
             <div className="method-desc">Скопируйте и отправьте ссылку любым способом</div>
@@ -214,9 +229,6 @@ const SharedAccess = () => {
           </div>
         </div>
       </div>
-      
-      {showEmailModal && <EmailInviteModal onClose={() => setShowEmailModal(false)} />}
-      {showLinkModal && <LinkInviteModal onClose={() => setShowLinkModal(false)} />}
     </div>
   );
 };

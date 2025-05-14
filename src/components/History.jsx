@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 // Компонент для модального окна подтверждения
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
@@ -91,97 +94,82 @@ const Notification = ({ message, type, onClose }) => {
 };
 
 const History = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({
-    date: '',
-    category: '',
-    description: '',
-    amount: ''
-  });
+  const [editForm, setEditForm] = useState({ date: '', category: '', description: '', amount: '', type: 'expense' });
   const isMobile = useMediaQuery({ maxWidth: 768 });
-
-  // Состояния для модальных окон
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [transactionToDelete, setTransactionToDelete] = useState(null);
   const [notification, setNotification] = useState(null);
+  const [newTransaction, setNewTransaction] = useState({ date: '', category: '', description: '', amount: '', type: 'expense' });
+  const [categories, setCategories] = useState([]);
 
-  // Исходные данные операций
-  const initialTransactions = [
-    { id: 1, date: '15.04.2023', category: 'Продукты', description: 'Магнит', amount: -1250.00, type: 'expense' },
-    { id: 2, date: '10.04.2023', category: 'Зарплата', description: 'ООО "Компания"', amount: 30000.00, type: 'income' },
-    { id: 3, date: '08.04.2023', category: 'Кафе', description: 'Starbucks', amount: -850.00, type: 'expense' },
-    { id: 4, date: '05.04.2023', category: 'Транспорт', description: 'Такси', amount: -450.00, type: 'expense' },
-    { id: 5, date: '01.04.2023', category: 'ЖКХ', description: 'Квартплата', amount: -12000.00, type: 'expense' },
-    { id: 6, date: '28.03.2023', category: 'Развлечения', description: 'Кино', amount: -600.00, type: 'expense' },
-    { id: 7, date: '25.03.2023', category: 'Зарплата', description: 'Фриланс', amount: 15000.00, type: 'income' },
-  ];
-
-  const [transactions, setTransactions] = useState(initialTransactions);
   const transactionsPerPage = 5;
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
   const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
   const totalPages = Math.ceil(transactions.length / transactionsPerPage);
 
-  // Форма для добавления новой транзакции
-  const [newTransaction, setNewTransaction] = useState({
-    date: new Date().toLocaleDateString('ru-RU'),
-    category: '',
-    description: '',
-    amount: '',
-    type: 'expense'
-  });
+  useEffect(() => { fetchTransactions(); }, []);
+  useEffect(() => {
+    axios.get(`${API_URL}/categories`).then(res => setCategories(res.data));
+  }, []);
+
+  const fetchTransactions = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${API_URL}/operations`);
+      setTransactions(res.data);
+    } catch (e) {
+      setNotification({ message: 'Ошибка загрузки операций', type: 'error' });
+    }
+    setLoading(false);
+  };
 
   // Добавить новую транзакцию
-  const handleAddTransaction = () => {
+  const handleAddTransaction = async () => {
     const amountValue = parseFloat(newTransaction.amount);
     if (!newTransaction.category || isNaN(amountValue)) {
-      setNotification({
-        message: "Пожалуйста, заполните все поля корректно.",
-        type: 'error'
-      });
+      setNotification({ message: 'Пожалуйста, заполните все поля корректно.', type: 'error' });
       return;
     }
-
-    const newTrans = {
-      id: Date.now(),
-      date: newTransaction.date,
-      category: newTransaction.category,
-      description: newTransaction.description,
-      amount: newTransaction.type === 'expense' ? -amountValue : amountValue,
-      type: newTransaction.type
-    };
-
-    setTransactions([newTrans, ...transactions]);
-    setCurrentPage(1);
-    setNewTransaction({
-      date: new Date().toLocaleDateString('ru-RU'),
-      category: '',
-      description: '',
-      amount: '',
-      type: 'expense'
-    });
-
-    setNotification({
-      message: "Операция успешно добавлена!",
-      type: 'success'
-    });
+    const categoryObj = categories.find(cat => cat.name === newTransaction.category);
+    if (!categoryObj) {
+      setNotification({ message: 'Категория не найдена', type: 'error' });
+      return;
+    }
+    try {
+      await axios.post(`${API_URL}/operations`, {
+        categoryId: categoryObj.id,
+        amount: newTransaction.type === 'expense' ? -Math.abs(amountValue) : Math.abs(amountValue),
+        date: newTransaction.date ? new Date(newTransaction.date).toISOString() : new Date().toISOString(),
+        description: newTransaction.description
+      });
+      setNewTransaction({ date: '', category: '', description: '', amount: '', type: 'expense' });
+      setNotification({ message: 'Операция успешно добавлена!', type: 'success' });
+      fetchTransactions();
+      setCurrentPage(1);
+    } catch (e) {
+      setNotification({ message: 'Ошибка при добавлении операции', type: 'error' });
+    }
   };
 
   // Повторить операцию
-  const handleRepeat = (transaction) => {
-    const newTransaction = {
-      ...transaction,
-      id: Date.now(),
-      date: new Date().toLocaleDateString('ru-RU')
-    };
-    setTransactions([newTransaction, ...transactions]);
-    setCurrentPage(1);
-    setNotification({
-      message: "Операция успешно повторена!",
-      type: 'success'
-    });
+  const handleRepeat = async (transaction) => {
+    try {
+      await axios.post(`${API_URL}/operations`, {
+        ...transaction,
+        id: undefined,
+        date: new Date().toISOString(),
+      });
+      setNotification({ message: 'Операция успешно повторена!', type: 'success' });
+      fetchTransactions();
+      setCurrentPage(1);
+    } catch (e) {
+      setNotification({ message: 'Ошибка при повторении операции', type: 'error' });
+    }
   };
 
   // Удалить операцию
@@ -190,50 +178,48 @@ const History = () => {
     setShowConfirmModal(true);
   };
 
-  const confirmDelete = () => {
-    setTransactions(transactions.filter(t => t.id !== transactionToDelete));
-    setShowConfirmModal(false);
-    setNotification({
-      message: "Операция успешно удалена!",
-      type: 'success'
-    });
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`${API_URL}/operations/${transactionToDelete}`);
+      setShowConfirmModal(false);
+      setNotification({ message: 'Операция успешно удалена!', type: 'success' });
+      fetchTransactions();
+    } catch (e) {
+      setNotification({ message: 'Ошибка при удалении операции', type: 'error' });
+    }
   };
 
   // Начать редактирование
   const startEditing = (transaction) => {
     setEditingId(transaction.id);
     setEditForm({
-      date: transaction.date,
-      category: transaction.category,
+      date: transaction.date ? new Date(transaction.date).toISOString().split('T')[0] : '',
+      category: transaction.category?.name || transaction.category,
       description: transaction.description,
-      amount: Math.abs(transaction.amount)
+      amount: Math.abs(transaction.amount),
+      type: transaction.amount < 0 ? 'expense' : 'income',
     });
   };
 
   // Сохранить изменения
-  const saveEdit = () => {
-    setTransactions(
-      transactions.map(t =>
-        t.id === editingId ? {
-          ...t,
-          date: editForm.date,
-          category: editForm.category,
-          description: editForm.description,
-          amount: t.type === 'expense' ? -editForm.amount : editForm.amount
-        } : t
-      )
-    );
-    setEditingId(null);
-    setNotification({
-      message: "Изменения сохранены!",
-      type: 'success'
-    });
+  const saveEdit = async () => {
+    try {
+      await axios.put(`${API_URL}/operations/${editingId}`, {
+        ...editForm,
+        amount: editForm.type === 'expense' ? -Math.abs(Number(editForm.amount)) : Math.abs(Number(editForm.amount)),
+        date: editForm.date || new Date().toISOString(),
+        id: editingId,
+      });
+      setEditingId(null);
+      setNotification({ message: 'Изменения сохранены!', type: 'success' });
+      fetchTransactions();
+    } catch (e) {
+      setNotification({ message: 'Ошибка при сохранении изменений', type: 'error' });
+    }
   };
 
   // Отменить редактирование
-  const cancelEdit = () => {
-    setEditingId(null);
-  };
+  const cancelEdit = () => { setEditingId(null); };
 
   // Изменение полей формы
   const handleEditChange = (e) => {
@@ -402,7 +388,9 @@ const History = () => {
                     <>
                       <div className="d-flex justify-content-between align-items-start">
                         <div>
-                          <h6 style={{ color: 'white', marginBottom: '4px' }}>{transaction.category}</h6>
+                          <h6 style={{ color: 'white', marginBottom: '4px' }}>
+                            {transaction.category?.name || transaction.category}
+                          </h6>
                           <p style={{ color: '#adb5bd', marginBottom: '4px', fontSize: '14px' }}>
                             {transaction.description}
                           </p>
@@ -479,7 +467,7 @@ const History = () => {
                               name="category"
                               value={editForm.category}
                               onChange={handleEditChange}
-                              className="form-control form-control-sm"
+                              className="form-control form-control-sm mb-2"
                               style={{ backgroundColor: '#615e68', color: 'white' }}
                             />
                           </td>
@@ -523,7 +511,9 @@ const History = () => {
                       ) : (
                         <>
                           <td style={{ color: 'white', textAlign: 'center' }}>{transaction.date}</td>
-                          <td style={{ color: 'white', textAlign: 'center' }}>{transaction.category}</td>
+                          <td style={{ color: 'white', textAlign: 'center' }}>
+                            {transaction.category?.name || transaction.category}
+                          </td>
                           <td style={{ color: 'white', textAlign: 'center' }}>{transaction.description}</td>
                           <td style={{ 
                             color: transaction.type === 'income' ? 'lightgreen' : 'lightcoral', 

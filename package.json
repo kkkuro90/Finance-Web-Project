@@ -1,4 +1,5 @@
 {
+  "proxy": "http://backend:5001",
   "name": "practice",
   "version": "0.1.0",
   "private": true,

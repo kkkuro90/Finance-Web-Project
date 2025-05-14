@@ -2,31 +2,59 @@ import { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 const Dashboard = () => {
   const categoriesChartRef = useRef(null);
   const expensesChartRef = useRef(null);
   const [activeChart, setActiveChart] = useState('categories');
+  const [summary, setSummary] = useState({ balance: 0, income: 0, expense: 0 });
+  const [categoryStats, setCategoryStats] = useState([]);
+  const [recentOperations, setRecentOperations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
   Chart.register(...registerables);
 
   useEffect(() => {
-    let categoriesChart, expensesChart;
+    const loadDashboardData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [summaryRes, statsRes, operationsRes] = await Promise.all([
+          axios.get(`${API_URL}/dashboard/summary`),
+          axios.get(`${API_URL}/dashboard/category-stats`),
+          axios.get(`${API_URL}/operations`)
+        ]);
+        setSummary(summaryRes.data);
+        setCategoryStats(statsRes.data);
+        setRecentOperations(operationsRes.data.slice(0, 5));
+      } catch (error) {
+        setError('Ошибка загрузки данных дашборда');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadDashboardData();
+  }, []);
 
+  useEffect(() => {
+    let categoriesChart, expensesChart;
     if (categoriesChartRef.current && activeChart === 'categories') {
       if (categoriesChartRef.current.chart) {
         categoriesChartRef.current.chart.destroy();
       }
-
       const ctx = categoriesChartRef.current.getContext('2d');
       categoriesChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Продукты', 'Транспорт', 'Кафе', 'ЖКХ', 'Развлечения'],
+          labels: categoryStats.map(stat => stat.category),
           datasets: [{
-            data: [1250, 450, 850, 12000, 1500],
+            data: categoryStats.map(stat => Math.abs(stat.total)),
             backgroundColor: [
               '#21013f',
               'blueviolet',
@@ -45,9 +73,7 @@ const Dashboard = () => {
               position: isMobile ? 'bottom' : 'right',
               labels: {
                 color: '#ffffff',
-                font: {
-                  size: isMobile ? 12 : 14
-                }
+                font: { size: isMobile ? 12 : 14 }
               }
             }
           }
@@ -55,20 +81,24 @@ const Dashboard = () => {
       });
       categoriesChartRef.current.chart = categoriesChart;
     }
-
     if (expensesChartRef.current && activeChart === 'expenses') {
       if (expensesChartRef.current.chart) {
         expensesChartRef.current.chart.destroy();
       }
-
+      const monthlyData = recentOperations.reduce((acc, op) => {
+        const month = new Date(op.date).toLocaleString('ru-RU', { month: 'short' });
+        if (!acc[month]) acc[month] = 0;
+        acc[month] += Math.abs(op.amount);
+        return acc;
+      }, {});
       const ctx = expensesChartRef.current.getContext('2d');
       expensesChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май'],
+          labels: Object.keys(monthlyData),
           datasets: [{
             label: 'Расходы',
-            data: [15000, 14000, 16000, 15500, 17000],
+            data: Object.values(monthlyData),
             borderColor: '#dc3545',
             backgroundColor: 'rgba(220, 53, 69, 0.1)',
             fill: true,
@@ -78,234 +108,178 @@ const Dashboard = () => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            }
-          },
+          plugins: { legend: { display: false } },
           scales: {
             y: {
               beginAtZero: false,
-              ticks: {
-                color: '#ffffff'
-              },
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              }
+              ticks: { color: '#ffffff' },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
             },
             x: {
-              ticks: {
-                color: '#ffffff'
-              },
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              }
+              ticks: { color: '#ffffff' },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
             }
           }
         }
       });
       expensesChartRef.current.chart = expensesChart;
     }
-
     return () => {
       if (categoriesChart) categoriesChart.destroy();
       if (expensesChart) expensesChart.destroy();
     };
-  }, [activeChart, isMobile]);
-  
+  }, [activeChart, isMobile, categoryStats, recentOperations]);
+
+  const handleExport = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/operations`);
+      const data = response.data;
+      const csv = [
+        ["Дата", "Категория", "Описание", "Сумма"],
+        ...data.map(op => [
+          new Date(op.date).toLocaleDateString(),
+          op.category.name,
+          op.description || "",
+          op.amount
+        ])
+      ].map(row => row.join(";"))
+        .join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "operations.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      setError('Ошибка экспорта данных');
+    }
+  };
+
+  if (loading) return <div className="main-content"><div className="loading">Загрузка...</div></div>;
+  if (error) return <div className="main-content"><div className="error">{error}</div></div>;
+
   return (
-    <div className={`${isMobile ? 'col-12' : 'col-md-9 col-lg-10'} main-content`}>
-      <div id="dashboard-content" style={isMobile ? { paddingTop: '60px' } : {}}>
-        {/* Заголовок и кнопки переключения */}
-        <div className={isMobile ? "mb-3" : "d-flex justify-content-between align-items-center mb-4"}>
-          <h2 style={{ color: 'white', fontSize: isMobile ? '200%' : '275%' }}>Дашборд</h2>
-          
-          {isMobile ? (
-            <div className="d-flex flex-wrap gap-2 my-3">
-              <button 
-                className="btn btn-primary flex-grow-1"
-                style={{ 
-                  backgroundColor: activeChart === 'categories' ? '#7b2cbf' : '#5b248f',
-                  fontSize: '14px'
-                }}
-                onClick={() => setActiveChart('categories')}
-              >
-                Категории
-              </button>
-              <button 
-                className="btn btn-primary flex-grow-1"
-                style={{ 
-                  backgroundColor: activeChart === 'expenses' ? '#7b2cbf' : '#5b248f',
-                  fontSize: '14px'
-                }}
-                onClick={() => setActiveChart('expenses')}
-              >
-                Динамика
-              </button>
-            </div>
-          ) : (
-            <>
-              <button 
-                className="btn btn-primary"
-                style={{ 
-                  backgroundColor: activeChart === 'categories' ? '#7b2cbf' : '#5b248f',
-
-                }}
-                onClick={() => setActiveChart('categories')}
-              >
-                Статистика по категориям
-              </button>
-              <button 
-                className="btn btn-primary"
-                style={{ 
-                  backgroundColor: activeChart === 'expenses' ? '#7b2cbf' : '#5b248f',
-
-                }}
-                onClick={() => setActiveChart('expenses')}
-              >
-                Динамика расходов
-              </button>
-            </>
-          )}
+    <div className="main-content">
+      <div id="dashboard-content">
+        <div className="dashboard-header">
+          <h2 className="dashboard-title">Дашборд</h2>
+          <div className="dashboard-switcher">
+            <button 
+              className={`btn btn-primary${activeChart === 'categories' ? ' active' : ''}`}
+              onClick={() => setActiveChart('categories')}
+            >
+              Категории
+            </button>
+            <button 
+              className={`btn btn-primary${activeChart === 'expenses' ? ' active' : ''}`}
+              onClick={() => setActiveChart('expenses')}
+            >
+              Динамика
+            </button>
+          </div>
         </div>
-
-        {/* Основной контент в две колонки на ПК */}
         <div className="row">
-          {/* Колонка с быстрыми действиями и операциями */}
           <div className="col-md-6">
-            {/* Быстрые действия - теперь всегда 2x2 */}
+            <div className="card mb-4">
+              <div className="card-header">
+                <h5 className="card-title">Финансовый обзор</h5>
+              </div>
+              <div className="card-body">
+                <div className="row text-center">
+                  <div className="col-4">
+                    <h6>Баланс</h6>
+                    <p className="mb-0" style={{ color: summary.balance >= 0 ? '#28a745' : '#dc3545' }}>
+                      {summary.balance.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' })}
+                    </p>
+                  </div>
+                  <div className="col-4">
+                    <h6>Доходы</h6>
+                    <p className="mb-0 text-success">
+                      {summary.income.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' })}
+                    </p>
+                  </div>
+                  <div className="col-4">
+                    <h6>Расходы</h6>
+                    <p className="mb-0 text-danger">
+                      {summary.expense.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="card mb-4">
               <div className="card-header">
                 <h5 className="card-title">Быстрые действия</h5>
               </div>
-              <div style={{ backgroundColor: '#390668' }} className="card-body">
+              <div className="card-body">
                 <div className="row g-2">
                   <div className="col-6">
                     <button 
-                      style={{ 
-                        width: '100%', 
-                        color: 'white', 
-                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
-                        marginBottom: '10px'
-                      }} 
-                      className="btn"
+                      className="btn btn-secondary w-100 mb-2"
                       onClick={() => navigate('/history')}
                     >
-                      {isMobile ? 'Повторить' : 'Повторить платеж'}
+                      Повторить платеж
                     </button>
                   </div>
                   <div className="col-6">
                     <button 
-                      style={{ 
-                        width: '100%', 
-                        color: 'white', 
-                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
-                        marginBottom: '10px'
-                      }} 
-                      className="btn"
+                      className="btn btn-secondary w-100 mb-2"
                       onClick={() => navigate('/history')}
                     >
-                      {isMobile ? 'Доход' : 'Добавить доход'}
+                      Добавить доход
                     </button>
                   </div>
                   <div className="col-6">
                     <button 
-                      style={{ 
-                        width: '100%', 
-                        color: 'white', 
-                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
-                        marginBottom: '10px'
-                      }} 
-                      className="btn"
+                      className="btn btn-secondary w-100 mb-2"
                       onClick={() => navigate('/history')}
                     >
-                      {isMobile ? 'Расход' : 'Добавить расход'}
+                      Добавить расход
                     </button>
                   </div>
                   <div className="col-6">
                     <button 
-                      style={{ 
-                        width: '100%', 
-                        color: 'white', 
-                        backgroundColor: 'rgba(139, 71, 184, 0.575)',
-                        marginBottom: '10px'
-                      }} 
-                      className="btn"
+                      className="btn btn-secondary w-100 mb-2"
+                      onClick={handleExport}
                     >
-                      {isMobile ? 'Экспорт' : 'Экспорт данных'}
+                      Экспорт данных
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Последние операции */}
             <div className="card">
               <div className="card-header d-flex justify-content-between align-items-center">
                 <h5 className="card-title">Последние операции</h5>
                 <a 
-                  style={{ textDecoration: 'none', color: 'white' }} 
                   href="#" 
-                  className="small"
-                  onClick={(e) => e.preventDefault()}
+                  className="small text-white"
+                  onClick={e => { e.preventDefault(); navigate('/history'); }}
                 >
-                  Все операции
+                  Все операции →
                 </a>
               </div>
-              <div style={{ backgroundColor: '#390668' }} className="card-body">
-                <div style={{ backgroundColor: 'rgba(139, 71, 184, 0.575)' }} className="transaction-item expense mb-2">
-                  <div style={{ color: 'white' }} className="d-flex justify-content-between">
-                    <p>Продукты</p>
-                    <span className="text-danger">-1,250.00 ₽</span>
-                  </div>
-                  <small className="text-muted">Магнит, 15 апр 2023</small>
-                </div>
-                <div style={{ backgroundColor: 'rgba(139, 71, 184, 0.575)' }} className="transaction-item income mb-2">
-                  <div style={{ color: 'white' }} className="d-flex justify-content-between">
-                    <p>Зарплата</p>
-                    <span className="text-success">+30,000.00 ₽</span>
-                  </div>
-                  <small className="text-muted">ООО "Компания", 10 апр 2023</small>
-                </div>
-                <div style={{ backgroundColor: 'rgba(139, 71, 184, 0.575)' }} className="transaction-item expense">
-                  <div style={{ color: 'white' }} className="d-flex justify-content-between">
-                    <p>Кафе</p>
-                    <span className="text-danger">-850.00 ₽</span>
-                  </div>
-                  <small className="text-muted">Starbucks, 8 апр 2023</small>
-                </div>
+              <div className="card-body">
+                <ul className="list-group list-group-flush">
+                  {recentOperations.map(op => (
+                    <li key={op.id} className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white">
+                      <span>
+                        <b>{op.category.name}</b> — {op.description || ''} <small className="text-muted">{new Date(op.date).toLocaleDateString()}</small>
+                      </span>
+                      <span style={{ color: op.amount > 0 ? '#28a745' : '#dc3545' }}>
+                        {op.amount > 0 ? '+' : ''}{op.amount.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' })}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
-          
-          {/* График */}
-          <div className={isMobile ? "mt-3" : "col-md-6"}>
+          <div className="col-md-6">
             <div className="card">
-              <div className="card-header">
-                <h5 className="card-title">
-                  {activeChart === 'categories' ? 'Статистика по категориям' : 'Динамика расходов'}
-                </h5>
-              </div>
-              <div style={{ backgroundColor: '#390668', minHeight: isMobile ? '300px' : '400px' }} className="card-body">
-                <div 
-                  style={{ 
-                    position: 'relative', 
-                    height: isMobile ? '350px' : '650px', 
-                    display: activeChart === 'categories' ? 'block' : 'none' 
-                  }}
-                >
-                  <canvas ref={categoriesChartRef} />
-                </div>
-                
-                <div 
-                  style={{ 
-                    position: 'relative', 
-                    height: isMobile ? '350px' : '650px', 
-                    display: activeChart === 'expenses' ? 'block' : 'none' 
-                  }}
-                >
-                  <canvas ref={expensesChartRef} />
-                </div>
+              <div className="card-body" style={{ height: '400px' }}>
+                <canvas ref={activeChart === 'categories' ? categoriesChartRef : expensesChartRef}></canvas>
               </div>
             </div>
           </div>
