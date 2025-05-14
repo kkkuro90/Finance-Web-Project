@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch('/api/auth/profile', {
+        const response = await fetch('http://localhost:5001/api/auth/profile', {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -51,6 +51,18 @@ async function loadDashboard() {
 }
 
 document.addEventListener('DOMContentLoaded', loadDashboard);
+
+// Handle dashboard navigation
+document.getElementById('dashboard-tab').addEventListener('click', (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Вы не авторизованы!');
+        window.location.href = 'auth.html';
+        return;
+    }
+    window.location.href = 'http://localhost:3000/dashboard?token=' + encodeURIComponent(token);
+});
 
 function toggleSettings() {
     const settingsModal = document.getElementById('settingsModal');
