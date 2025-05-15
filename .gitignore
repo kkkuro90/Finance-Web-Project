@@ -1,0 +1,12 @@
+node_modules/
+pgdata/
+*.log
+*.env
+*.user
+*.vs
+bin/
+obj/
+backend/bin/
+backend/obj/
+dashboard/node_modules/
+frontend/node_modules/

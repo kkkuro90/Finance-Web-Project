@@ -1,0 +1,16 @@
+{
+  "name": "finance-app",
+  "version": "1.0.0",
+  "description": "Finance App with React Dashboard and Frontend",
+  "scripts": {
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\" \"npm run start:dashboard\"",
+    "start:frontend": "npx serve frontend -p 8080",
+    "start:backend": "cd backend && dotnet run",
+    "start:dashboard": "cd dashboard && npm start",
+    "install:all": "npm install && cd backend && dotnet restore && cd ../dashboard && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "serve": "^14.2.1"
+  }
+}

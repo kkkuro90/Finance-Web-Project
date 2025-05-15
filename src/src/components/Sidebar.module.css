@@ -1,0 +1,160 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 85%;
+  max-width: 320px;
+  height: 100vh;
+  background-color: #34065ffa;
+  padding: 20px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.burgerButton {
+  position: fixed;
+  top: 15px;
+  left: 10px;
+  background: none;
+  border: none;
+  display: block;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+}
+
+.logoContainer {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  color: white;
+  font-size: 210%;
+  margin-bottom: 0;
+}
+
+.subtitle {
+  color: white;
+  font-size: 140%;
+  font-weight: normal;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  color: rgb(149, 16, 211);
+  font-size: 130%;
+  text-align: left;
+  transition: none;
+}
+
+.navButton:hover {
+  background: none;
+}
+
+.navButton:hover .navText {
+  color: violet;
+  cursor: pointer;
+}
+
+.navText {
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.navButton.active {
+  color: rgb(149, 16, 211);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.balanceCard {
+  background: #390668;
+  border-radius: 12px;
+  padding: 1px;
+  margin-top: auto;
+}
+
+.balanceTitle {
+  color: white;
+  text-align: center;
+  font-size: 160%;
+  margin-top: 1.5rem;
+  margin-bottom: 0px;
+}
+
+.balanceAmount {
+  color: white;
+  text-align: center;
+  font-size: 170%;
+  margin-bottom: 15px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.incomeLabel {
+  font-size: 120%;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+  text-align: center;
+  color: #198754;
+  margin-left: 3rem;
+}
+.expenseLabel {
+  font-size: 120%;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+  text-align: center;
+  color: #DC3545;
+  margin-right: 3rem;
+}
+
+.income {
+  color: #198754;
+  font-weight: bold;
+  margin-left: 3rem;
+  font-size: 120%;
+}
+
+.expense {
+  color: #DC3545;
+  font-weight: bold;
+  margin-right: 3rem;
+  font-size: 120%;
+}

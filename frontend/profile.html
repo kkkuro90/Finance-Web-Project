@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Аккаунт пользователя - Waves</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="col-md-3 col-lg-2 sidebar">
+            <h1 class="text-center mb-4 sidebar-title">
+                <a href="index.html" style="text-decoration: none; color: #ffffff; ">Waves</a>
+              </h1>
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active sidebar-link" href="http://localhost:3000/dashboard" id="dashboard-tab">
+                        <i class="bi bi-speedometer2 me-2"></i> Дашборд
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="#" id="logout-tab">
+                        <i class="bi bi-logout-up me-2"></i> Выйти
+                    </a>
+                </li>
+            </ul>
+            <div class="mt-4 p-3 balance-info">
+                <h6 class="balance-title">Общий баланс</h6>
+                <h3 id="total-balance" class="total-balance">3 250 руб</h3>
+                <div class="income-expense">
+                    <div class="income">
+                        <p>Доход:</p>
+                        <span id="total-income">32 500 руб</span>
+                    </div>
+                    <div class="expense">
+                        <p>Расход:</p>
+                        <span id="total-expense">29 250 руб</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form class="register-form" id="profileInfo">
+            <div class="profile-centered">
+                <div class="profile-avatar">
+                    <img src="https://i.pinimg.com/474x/d5/82/9d/d5829d01f4425addd09920f1b02bd1e4.jpg" alt="Аватар профиля">
+                </div>
+                <h2 id="profileName">Surname Name</h2> 
+            </div>
+            <p class="profile-text">Логин: <span id="profileLogin">User123456</span></p> 
+            <p class="profile-text">Email: <span id="profileEmail">userl@example.com</span></p> 
+            <p class="profile-text">Баланс: <span id="profileBalance">100 руб.</span></p> 
+            <div class="profile-centered">
+                <button type="button" class="primary-button" style="width: 100%; margin-top: 4rem;" onclick="toggleSettings()">Настройки профиля</button>
+            </div>
+            <button id="saveProfileBtn" class="primary-button" style="width: 100%;">Сохранить изменения</button>
+        </form>
+
+        <div class="settings-modal" id="settingsModal" style="display: none;">
+            <div class="modal-content">
+                <button class="close-button" onclick="toggleSettings()">&times;</button>
+                <h2 style="text-align: center;">Настройки профиля</h2>
+                <div class="form-group">
+                    <label for="name">Имя:</label><br>
+                    <input type="text" id="name" placeholder="Ваше имя">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label><br>
+                    <input type="email" id="email" placeholder="Ваш email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Новый пароль:</label><br>
+                    <input type="password" id="password" placeholder="Новый пароль">
+                </div>
+                
+                <h2 style="text-align: center;">Управление бюджетом</h2>
+                <button class="primary-button add-source">Добавить источник дохода</button>
+                <button id="saveProfileBtn" class="primary-button" style="width: 100%;">Сохранить изменения</button>
+                <button class="primary-button delete-account">Удалить аккаунт</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSettings() {
+            const settingsModal = document.getElementById('settingsModal');
+
+            if (settingsModal.classList.contains('active')) {
+                settingsModal.classList.remove('active');
+                setTimeout(() => {
+                    settingsModal.style.display = 'none';
+                }, 300); 
+            } else {
+                settingsModal.style.display = 'flex';
+                setTimeout(() => {
+                    settingsModal.classList.add('active');
+                }, 10); 
+            }
+        }
+    </script>
+    <script src="profile.js"></script>
+</body>
+</html>

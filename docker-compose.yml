@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: financeapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: marusa98
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=db;Database=financeapp;Username=postgres;Password=marusa98
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend:/app
+    command: ["dotnet", "run", "--urls", "http://0.0.0.0:5001"]
+
+  frontend:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: npx serve -s . -l 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

@@ -1,0 +1,151 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 85%;
+  max-width: 320px;
+  height: 100vh;
+  background-color: #34065ffa;
+  z-index: 1000;
+  padding: 20px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.burgerButton {
+  position: fixed;
+  top: 15px;
+  left: 10px;
+  background: none;
+  border: none;
+  display: block;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+}
+
+/* Контент сайдбара */
+.logoContainer {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  color: white;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: white;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.navButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navButton.active {
+  color: rgb(149, 16, 211);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+/* Карточка баланса */
+.balanceCard {
+  background: #390668;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: auto;
+}
+
+.balanceTitle {
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.balanceAmount {
+  color: white;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.incomeLabel, .expenseLabel {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+}
+
+.income {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.expense {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+@media (min-width: 992px) {
+  .burgerButton, .overlay {
+    display: none;
+  }
+}

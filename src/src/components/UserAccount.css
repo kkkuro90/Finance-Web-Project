@@ -1,0 +1,446 @@
+body { 
+    margin: 0; 
+    min-height: 100vh; 
+    color: #fff; 
+    font-family: 'Inter', Arial, sans-serif; 
+    font-weight: 400; 
+    line-height: 1.4; 
+} 
+
+.main-container { 
+    min-height: 100vh; 
+    width: 100vw; 
+    background: linear-gradient(to right, #a020f0 0%, #3a1857 35%, #18181a 70%);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 2rem; 
+    box-sizing: border-box; 
+    justify-content: center;
+} 
+.register-form { 
+    background: #18181ab3; 
+    border-radius: 1rem; 
+    padding: 2rem; 
+    width: 400px; 
+    opacity: 0.9; 
+    box-shadow: 0 8px 32px 0 #1f268726; 
+} 
+
+.form-group { 
+    margin-bottom: 1.5rem; 
+} 
+
+.form-group input { 
+    width: 100%; 
+    padding: 0.8rem; 
+    border: none; 
+    border-radius: 2rem; 
+    background: rgba(255, 255, 255, 0.1); 
+    color: #fff; 
+    box-sizing: border-box; 
+} 
+
+.nav.flex-column {
+  color: white; /* или цвет под твой дизайн */
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  display: block;
+  transition: all 0.3s ease;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+
+.primary-button { 
+    background-color: rgb(160, 32, 240); 
+    color: #fff; 
+    border: none; 
+    padding: 1rem 2rem; 
+    border-radius: 2rem; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    text-decoration: none; 
+    margin-bottom: 1rem; 
+} 
+
+.sidebar {
+    background-color: #34065ffa;
+    position: fixed; 
+    top: 0;            
+    left: 0;           
+    width: auto;
+    height: 100%;
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+    padding: 20px;
+}
+
+h4{
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.sidebar-title {
+    color: white;
+    text-align: center;
+}
+
+.sidebar-link {
+    font-size: 2rem;
+    color: white;
+    text-decoration: none;
+}
+
+.nav {
+    list-style: none;
+    text-decoration: none;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.balance-info {
+  padding-left: 1rem; 
+  padding-right: 1rem;
+}
+
+.balance-title {
+    color: white;
+    text-align: center;
+    font-size: 1.5rem; 
+    font-weight: 600; 
+    margin-bottom: 0.7rem;
+}
+
+.balance-info .balance-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.balance-container{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 2rem;
+    margin: 1.2rem 1rem auto auto;
+}
+
+.total-balance {
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+
+}
+
+.expense {
+    font-size: large;
+    text-align: center;
+    color: #dc3545;
+}
+
+.income-expense {
+    display: flex;
+    justify-content: space-around; 
+    align-items: flex-start;
+    margin: 0 auto; 
+}
+
+.income,
+.expense {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 2rem;
+    margin: 1.2rem 1rem auto auto;
+}
+
+.income p,
+.expense p {
+    font-size: large;
+    margin: 0;
+}
+
+.income {
+    color: #28a745;
+}
+
+.profile-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.profile-info {
+    background-color: rgba(206, 150, 255, 0.15);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; 
+}
+
+.profile-centered {
+    text-align: center; 
+    margin-bottom: 1rem; 
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1rem; 
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.profile-text {
+    text-align: left; 
+    margin-bottom: 0;
+    font-size: 1.3rem;
+}
+
+.settings-modal {
+    display: none; 
+    background: #18181a; 
+    border-radius: 1rem; 
+    padding: 2rem; 
+    width: 400px; 
+    opacity: 0.9; 
+    position: fixed; 
+    height: 85%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-modal.active {
+    opacity: 1; 
+    visibility: visible; 
+}
+
+
+.modal-content {
+    padding: 2rem;
+    border-radius: 8px;
+    width: 400px; 
+    max-width: 90%;
+    position: relative;
+}
+
+.close-button {
+    background-color: rgb(160, 32, 240); 
+    color: #fff; 
+    border: none; 
+    padding: 0.6rem 1rem; 
+    border-radius: 2rem; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    text-decoration: none; 
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+}
+
+.add-source {
+    background: transparent;
+    border: 1px solid white; 
+    width: 100%;
+    color: #fff;
+    padding: 1rem 2rem; 
+    border-radius: 2rem; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    text-decoration: none; 
+    margin-bottom: 1rem; 
+}
+
+.delete-account {
+    background-color: #DD0E50; 
+    width: 100%;
+    color: #fff; 
+    border: none; 
+    padding: 1rem 2rem; 
+    border-radius: 2rem; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    text-decoration: none; 
+    margin-bottom: 1rem; 
+}
+
+@media (max-width: 380px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 1000;
+        background: rgba(27, 22, 29, 0.95);
+        font-size: 1rem; 
+    }
+
+    .sidebar-title,
+    .sidebar-link,
+    .balance-title,
+    .total-balance,
+    .income p,
+    .expense p,
+    .income span,
+    .expense span {
+        font-size: 1rem !important;
+        line-height: 1.2;
+    }
+
+    .menu-toggle {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin-right: 1rem;
+        z-index: 1001;
+    }
+
+    .nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 1rem;
+        background: #1c161d;
+        padding: 1rem;
+        border-radius: 1rem;
+        z-index: 1000;
+        min-width: 120px;
+    }
+
+    .nav.active {
+        display: flex;
+    }
+
+    .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .sidebar-link {
+        padding: 0.4rem 0.6rem;
+        text-decoration: none;
+        color: white;
+    }
+
+    .balance-info {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: flex-end;
+        color: white;
+        font-size: 1rem;
+    }
+
+    .balance-info,
+    .balance-container {
+        gap: 0.25rem;
+    }
+
+    .balance-title {
+        margin-bottom: 0; 
+        margin: 0;
+    }
+
+    .register-form {
+        width: 90%;
+        max-width: 360px;
+        padding: 1.5rem;
+        transform: translateY(10%);
+    }
+
+    .settings-modal,
+    .modal-content {
+        width: 90%;
+        max-width: 360px;
+        padding: 1.5rem;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .profile-info {
+    gap: 0.5rem;
+}
+
+    .profile-centered {
+        font-size: 1rem;
+    }
+
+    .profile-text {
+        font-size: 1rem;
+    }
+
+    .profile-main {
+        margin-bottom: 4rem;
+        padding-top: 5rem;
+    }
+
+    .form-group input{
+        padding: 1.1rem;
+    }
+    
+    .add-source,
+    .primary-button,
+    .delete-account {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        padding: 0.6rem;
+    }
+
+    .close-button{
+        padding: 0.2rem 0.6rem;
+    }
+
+    .form-group br {
+    display: none; /* Убираем <br>, чтобы избежать лишнего разрыва */
+  }
+
+  .form-group label,
+  .form-group input {
+    margin-top: 0.5rem;
+  }
+
+  .form-group input {
+    font-size: 0.9rem;
+  }
+}
