@@ -50,6 +50,9 @@ namespace backend.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
+            // Отправка уведомления в Telegram
+            await TelegramNotifier.SendMessageAsync($"Новый пользователь зарегистрирован: {user.Email ?? user.Login}");
+
             return Ok(new { Message = "User registered successfully!" });
         }
 
