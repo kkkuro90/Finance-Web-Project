@@ -11,87 +11,65 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
   return (
     <div className={styles.sidebar}>
-      <h4 className="text-center mb-4" style={{ color: 'white', fontSize: '210%' }}>Waves</h4>
-      <h4 className="text-center mb-4" style={{ color: 'white' }}>Финансовый <br />менеджер</h4>
+      <div className={styles.logoContainer}>
+        <h1 className={styles.logo}>Waves</h1>
+        <h4 className={styles.subtitle}><b>Финансовый <br /> менеджер </b></h4>
+      </div>
       
-      <ul className="nav flex-column">
-        <li className="nav-item">
-          <a 
-            style={{ fontSize: '130%' }} 
-            className={`nav-link ${activeTab === 'dashboard' ? styles['active'] : ''} ${styles['navLink']}`} 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange('dashboard');
-            }}
-          >
-            <i className="bi bi-speedometer2 me-2"></i> Дашборд
-          </a>
-        </li>
-        <li className="nav-item">
-          <a 
-            style={{ fontSize: '130%' }} 
-            className={`nav-link ${activeTab === 'history' ? styles['active'] : ''} ${styles['navLink']}`} 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange('history');
-            }}
-          >
-            <i className="bi bi-clock-history me-2"></i> История
-          </a>
-        </li>
-        <li className="nav-item">
-          <a 
-            style={{ fontSize: '130%' }} 
-            className={`nav-link ${activeTab === 'categories' ? styles['active'] : ''} ${styles['navLink']}`} 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange('categories');
-            }}
-          >
-            <i className="bi bi-tags me-2"></i> Категории
-          </a>
-        </li>
-        <li className="nav-item">
-          <a 
-            style={{ fontSize: '130%' }} 
-            className={`nav-link ${activeTab === 'financial' ? styles['active'] : ''} ${styles['navLink']}`} 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange('financial');
-            }}
-          >
-            <i className="bi bi-graph-up me-2"></i> Финансовый обзор
-          </a>
-        </li>
-        <li className="nav-item">
-          <a 
-            style={{ fontSize: '130%' }} 
-            className={`nav-link ${activeTab === 'shared' ? styles['active'] : ''} ${styles['navLink']}`} 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange('shared');
-            }}
-          >
-            <i className="bi bi-people me-2"></i> Совместный доступ
-          </a>
-        </li>   
-      </ul>
+      <div className={styles.nav}>
+        <button 
+          className={`${styles.navButton} ${activeTab === 'dashboard' ? styles.active : ''}`}
+          onClick={() => handleTabChange('dashboard')}
+        >
+          <i className={`bi bi-speedometer2 ${styles.icon}`}></i>
+          <span className={styles.navText}>Дашборд</span>
+        </button>
+        
+        <button 
+          className={`${styles.navButton} ${activeTab === 'history' ? styles.active : ''}`}
+          onClick={() => handleTabChange('history')}
+        >
+          <i className={`bi bi-clock-history ${styles.icon}`}></i>
+          <span className={styles.navText}>История</span>
+        </button>
+        
+        <button 
+          className={`${styles.navButton} ${activeTab === 'categories' ? styles.active : ''}`}
+          onClick={() => handleTabChange('categories')}
+        >
+          <i className={`bi bi-tags ${styles.icon}`}></i>
+          <span className={styles.navText}>Категории</span>
+        </button>
+        
+        <button 
+          className={`${styles.navButton} ${activeTab === 'financial' ? styles.active : ''}`}
+          onClick={() => handleTabChange('financial')}
+        >
+          <i className={`bi bi-graph-up ${styles.icon}`}></i>
+          <span className={styles.navText}>Финансовый обзор</span>
+        </button>
+        
+        <button 
+          className={`${styles.navButton} ${activeTab === 'shared' ? styles.active : ''}`}
+          onClick={() => handleTabChange('shared')}
+        >
+          <i className={`bi bi-people ${styles.icon}`}></i>
+          <span className={styles.navText}>Совместный доступ</span>
+        </button>
+      </div>
       
       <div className={styles.balanceCard}>
         <h6 className={styles.balanceTitle}>Общий баланс</h6>
         <h3 className={styles.balanceAmount}>25,430.50 ₽</h3>
-        <div className="d-flex justify-content-between">
-          <p className={styles.statItem}>
-            Доход: <span className={styles.income}>32,500.00 ₽</span>
-          </p>
-          <p className={styles.statItem}>
-            Расход: <span className={styles.expense}>7,069.50 ₽</span>
-          </p>
+        <div className={styles.stats}>
+          <div className={styles.statItem}>
+            <span className={styles.incomeLabel}>Доход:</span>
+            <span className={styles.income}>32,500.00 ₽</span>
+          </div>
+          <div className={styles.statItem}>
+            <span className={styles.expenseLabel}>Расход:</span>
+            <span className={styles.expense}>7,069.50 ₽</span>
+          </div>
         </div>
       </div>
     </div>

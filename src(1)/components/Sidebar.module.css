@@ -6,7 +6,6 @@
   max-width: 320px;
   height: 100vh;
   background-color: #34065ffa;
-  z-index: 1000;
   padding: 20px;
   transition: left 0.3s ease;
   overflow-y: auto;
@@ -51,21 +50,14 @@
 
 .logo {
   color: white;
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+  font-size: 210%;
+  margin-bottom: 0;
 }
 
 .subtitle {
   color: white;
-  font-size: 1rem;
+  font-size: 140%;
   font-weight: normal;
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 20px;
 }
 
 .navButton {
@@ -76,14 +68,23 @@
   border-radius: 8px;
   background: none;
   border: none;
-  color: white;
-  font-size: 1rem;
+  color: rgb(149, 16, 211);
+  font-size: 130%;
   text-align: left;
-  transition: background 0.2s;
+  transition: none;
 }
 
 .navButton:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: none;
+}
+
+.navButton:hover .navText {
+  color: violet;
+  cursor: pointer;
+}
+
+.navText {
+  transition: color 0.2s, text-shadow 0.2s;
 }
 
 .navButton.active {
@@ -98,21 +99,22 @@
 .balanceCard {
   background: #390668;
   border-radius: 12px;
-  padding: 15px;
+  padding: 1px;
   margin-top: auto;
 }
 
 .balanceTitle {
   color: white;
   text-align: center;
-  font-size: 1rem;
-  margin-bottom: 8px;
+  font-size: 160%;
+  margin-top: 1.5rem;
+  margin-bottom: 0px;
 }
 
 .balanceAmount {
   color: white;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 170%;
   margin-bottom: 15px;
 }
 
@@ -126,18 +128,33 @@
   flex-direction: column;
 }
 
-.incomeLabel, .expenseLabel {
-  font-size: 0.8rem;
+.incomeLabel {
+  font-size: 120%;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 4px;
+  text-align: center;
+  color: #198754;
+  margin-left: 3rem;
+}
+.expenseLabel {
+  font-size: 120%;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+  text-align: center;
+  color: #DC3545;
+  margin-right: 3rem;
 }
 
 .income {
-  color: #2ecc71;
+  color: #198754;
   font-weight: bold;
+  margin-left: 3rem;
+  font-size: 120%;
 }
 
 .expense {
-  color: #e74c3c;
+  color: #DC3545;
   font-weight: bold;
+  margin-right: 3rem;
+  font-size: 120%;
 }
