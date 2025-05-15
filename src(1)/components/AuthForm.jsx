@@ -82,7 +82,7 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="main-container">
       {notification && (
         <Notification
           message={notification.message}

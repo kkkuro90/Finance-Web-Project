@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar.jsx";
 import MobileSidebar from "./MobileSidebar/MobileSidebar.jsx";
 import "./UserAccount.css";
-import "./MobileSidebar/MobileSidebar.module.css"
-import "./fin.css"
+import "./MobileSidebar/MobileSidebar.module.css";
+import "./Sidebar.module.css";
+import "./Alert.css"; 
 
 function UserAccount() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+  const [notification, setNotification] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const [profileData] = useState({
+  const [profileData, setProfileData] = useState({
     name: "Surname Name",
     login: "User123456",
     email: "user@example.com",
@@ -26,6 +29,22 @@ function UserAccount() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    window.showNotification = (message, type = "success") => {
+      setNotification({ message, type });
+    };
+
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      delete window.showNotification;
+    };
+  }, []);
+
   const toggleSettings = () => setIsModalOpen((prev) => !prev);
 
   const handleSettingsChange = (e) => {
@@ -40,34 +59,110 @@ function UserAccount() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      console.log("Сохраняем изменения:", settings);
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:5001/api/auth/update-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          Name: settings.name,
+          Email: settings.email,
+          NewPassword: settings.password
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Ошибка при сохранении');
+      }
+
+      setProfileData({
+        ...profileData,
+        name: settings.name,
+        email: settings.email
+      });
+
+      setNotification({ message: 'Профиль успешно обновлён!', type: 'success' });
       toggleSettings();
+
     } catch (error) {
-      console.error("Ошибка сохранения:", error);
+      setNotification({ message: error.message, type: 'error' });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDeleteAccount = async () => {
-    if (
-      window.confirm("Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.")
-    ) {
-      setIsLoading(true);
-      try {
-        console.log("Удаление аккаунта");
-      } catch (error) {
-        console.error("Ошибка удаления:", error);
-      } finally {
-        setIsLoading(false);
+    setShowConfirmModal(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:5001/api/auth/delete-account', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) {
+        throw new Error('Ошибка при удалении аккаунта');
       }
+
+      setNotification({ message: 'Аккаунт успешно удалён', type: 'success' });
+      localStorage.removeItem('token');
+      setTimeout(() => {
+        window.location.href = '/auth.html';
+      }, 1500);
+
+    } catch (error) {
+      setNotification({ message: error.message, type: 'error' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddIncome = async () => {
+    const amount = prompt('Введите сумму дохода:', '0');
+    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+      setNotification({ message: 'Введите корректную сумму!', type: 'error' });
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:5001/api/auth/add-income', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ Amount: Number(amount) })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.Message || 'Не удалось добавить доход');
+      }
+
+      setNotification({ message: 'Доход успешно добавлен!', type: 'success' });
+      window.location.reload();
+
+    } catch (error) {
+      setNotification({ message: error.message, type: 'error' });
     }
   };
 
   return (
-    <div className="container">
+    <div className="main-container">
       {isDesktop && <Sidebar />}
-
       {!isDesktop && <MobileSidebar />}
 
       <form className="register-form" id="profileInfo">
@@ -142,7 +237,12 @@ function UserAccount() {
           </div>
 
           <h2 style={{ textAlign: "center" }}>Управление бюджетом</h2>
-          <button className="add-source">Добавить источник дохода</button>
+          <button
+            className="add-source"
+            onClick={handleAddIncome}
+          >
+            Добавить источник дохода
+          </button>
           <button
             className="primary-button"
             style={{ width: "100%" }}
@@ -158,6 +258,29 @@ function UserAccount() {
           </button>
         </div>
       </div>
+
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
+
+      {showConfirmModal && (
+        <div className="confirmation-overlay">
+          <div className="confirmation-modal">
+            <h3>Подтверждение</h3>
+            <p>Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.</p>
+            <div className="confirmation-button-group">
+              <button className="confirmation-button-confirm" onClick={confirmDelete}>
+                Да, удалить
+              </button>
+              <button className="confirmation-button-cancel" onClick={() => setShowConfirmModal(false)}>
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

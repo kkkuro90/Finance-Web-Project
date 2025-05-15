@@ -90,7 +90,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="main-container">
       <Notification
         message={notification.message}
         type={notification.type}
