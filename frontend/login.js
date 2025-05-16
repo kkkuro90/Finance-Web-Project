@@ -1,3 +1,9 @@
+// Проверяем, что пользователь не авторизован
+if (!checkGuest()) {
+    // Если пользователь авторизован, checkGuest выполнит редирект
+    return;
+}
+
 document.querySelector('.register-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -7,8 +13,14 @@ document.querySelector('.register-form').addEventListener('submit', async (e) =>
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
+    // Очищаем предыдущие сообщения
+    const errorMessage = document.getElementById('error-message');
+    const successMessage = document.getElementById('success-message');
+    errorMessage.style.display = 'none';
+    successMessage.style.display = 'none';
+
     try {
-        const response = await fetch('http://localhost:5001/api/auth/register', {
+        const response = await fetch(`${config.apiUrl}${config.endpoints.register}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -18,17 +30,25 @@ document.querySelector('.register-form').addEventListener('submit', async (e) =>
                 Email: email,
                 Password: password
             }),
+            credentials: 'include'
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            const errorData = await response.json();
-            alert(`Ошибка: ${errorData.Message || 'Не удалось зарегистрироваться.'}`);
-            return;
+            throw new Error(data.message || 'Ошибка при регистрации');
         }
 
-        alert('Регистрация прошла успешно!');
-        window.location.href = 'auth.html';
+        // Показываем сообщение об успехе
+        successMessage.textContent = 'Регистрация прошла успешно! Сейчас вы будете перенаправлены на страницу входа.';
+        successMessage.style.display = 'block';
+
+        // Редирект на страницу входа через 2 секунды
+        setTimeout(() => {
+            window.location.href = 'auth.html';
+        }, 2000);
     } catch (error) {
-        alert('Произошла ошибка при регистрации.');
+        errorMessage.textContent = error.message || 'Произошла ошибка при регистрации';
+        errorMessage.style.display = 'block';
     }
 });

@@ -5002,8 +5002,8 @@ fieldset:disabled .btn {
     --bs-card-cap-bg: rgba(var(--bs-body-color-rgb), 0.03);
     --bs-card-cap-color: ;
     --bs-card-height: ;
-    --bs-card-color: ;
-    --bs-card-bg: var(--bs-body-bg);
+    --bs-card-color: white;
+    --bs-card-bg: var(--bs-card-border-color);
     --bs-card-img-overlay-padding: 1rem;
     --bs-card-group-margin: 0.75rem;
     position: relative;

@@ -1,0 +1,47 @@
+/* Import dashboard specific styles */
+@import './dashboard.css';
+
+/* ... existing code ... */
+
+/* Override and remove old dashboard styles */
+.sidebar {
+  background-color: #2d2640;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* Remove old card styles as they are now in dashboard.css */
+.card {
+  margin-bottom: 1.5rem;
+}
+
+/* Remove old transaction styles as they are now in dashboard.css */
+.transaction-item {
+  padding: 1rem 0;
+}
+
+/* Update navigation styles to match the theme */
+.nav-link.active {
+  color: #ffffff;
+  background-color: #6f42c1;
+}
+
+/* Remove old table styles as they are now in dashboard.css */
+.table-responsive {
+  margin-bottom: 1rem;
+}
+
+/* Remove old budget styles as they are now in dashboard.css */
+.budget-summary,
+.budget-categories,
+.category-card,
+.budget-form {
+  /* These styles are now handled in dashboard.css */
+}
+
+/* ... existing code ... */ 

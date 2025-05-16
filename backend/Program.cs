@@ -57,6 +57,33 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Применяем миграции автоматически
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate();
+        
+        // Проверяем, есть ли роли в базе данных
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var roles = new[] { "Admin", "User" };
+        foreach (var role in roles)
+        {
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Произошла ошибка при миграции базы данных.");
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

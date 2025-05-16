@@ -2,37 +2,42 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Форма регистрации</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация - Waves</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <form class="register-form">
       <h2 style="text-align: center;">Регистрация</h2>
+      <div id="error-message" class="error-message" style="display: none;"></div>
+      <div id="success-message" class="success-message" style="display: none;"></div>
       <div class="form-group">
         <label for="login">Логин</label>
-        <input type="text" id="login" name="login" placeholder="Ваш логин">
+        <input type="text" id="login" name="login" placeholder="Ваш логин" required>
       </div>
       <div class="form-group">
         <label for="surname">Фамилия</label>
-        <input type="text" id="surname" name="surname" placeholder="Ваша фамилия">
+        <input type="text" id="surname" name="surname" placeholder="Ваша фамилия" required>
       </div>
       <div class="form-group">
         <label for="name">Имя</label>
-        <input type="text" id="name" name="name" placeholder="Ваше имя">
+        <input type="text" id="name" name="name" placeholder="Ваше имя" required>
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Ваш email">
+        <input type="email" id="email" name="email" placeholder="Ваш email" required>
       </div>
       <div class="form-group">
         <label for="password">Пароль</label>
-        <input type="password" id="password" name="password" placeholder="Ваш пароль">
+        <input type="password" id="password" name="password" placeholder="Ваш пароль" required minlength="6">
+        <small class="form-text">Минимум 6 символов</small>
       </div>
       <button type="submit" class="primary-button" style="width: 100%;">Зарегистрироваться</button>
-      <p class="already">Уже зарегистрированы? <a href="auth.html">Войти</a></p>
+      <p class="already">Уже зарегистрированы? <a href="/auth">Войти</a></p>
     </form>
   </div>
-   <script src="login.js"></script>
+  <script src="config.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>
