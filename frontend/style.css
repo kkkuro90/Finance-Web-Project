@@ -458,6 +458,48 @@ html {
     width: 100%;
 }
 
+/* Сообщения об ошибках и успехе */
+.error-message {
+    background-color: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #991b1b;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.success-message {
+    background-color: #dcfce7;
+    border: 1px solid #22c55e;
+    color: #166534;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.form-text {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Стили для обязательных полей */
+input:required {
+    background-color: #fff;
+    border-color: #e5e7eb;
+}
+
+input:required:invalid {
+    border-color: #ef4444;
+}
+
+input:required:valid {
+    border-color: #22c55e;
+}
+
     /* Для смартфонов */
 @media (min-width: 600px) and (max-device-width: 1040px) {
 
