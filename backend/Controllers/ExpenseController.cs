@@ -108,6 +108,9 @@ namespace backend.Controllers
             _context.Expenses.Add(expense);
             await _context.SaveChangesAsync();
 
+            // Отправка уведомления в Telegram
+            await TelegramNotifier.SendMessageAsync($"Добавлена операция: {expense.Description ?? "Без описания"}, сумма: {expense.Amount}, категория: {category?.Name ?? "-"}" );
+
             return Ok(expense);
         }
 
