@@ -87,7 +87,7 @@ namespace backend.Controllers
             // Проверка превышения бюджета по категории
             if (category.MonthlyBudget.HasValue && dto.Amount < 0)
             {
-                var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+                var monthStart = DateTime.SpecifyKind(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1), DateTimeKind.Utc);
                 var spent = await _context.Operations
                     .Where(o => o.CategoryId == category.Id && o.Date >= monthStart && o.Amount < 0)
                     .SumAsync(o => Math.Abs(o.Amount));
@@ -103,7 +103,7 @@ namespace backend.Controllers
                 var group = await _context.FamilyGroups.FindAsync(user.FamilyGroupId);
                 if (group != null && group.Budget > 0 && dto.Amount < 0)
                 {
-                    var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+                    var monthStart = DateTime.SpecifyKind(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1), DateTimeKind.Utc);
                     var familySpent = await _context.Operations
                         .Include(o => o.User)
                         .Where(o => o.User.FamilyGroupId == group.Id && o.Date >= monthStart && o.Amount < 0)
@@ -122,7 +122,7 @@ namespace backend.Controllers
                 Description = dto.Description,
                 Amount = dto.Amount,
                 UserId = userId,
-                Date = DateTime.UtcNow
+                Date = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc)
             };
 
             // Update user balance
@@ -169,7 +169,7 @@ namespace backend.Controllers
             // Проверка превышения бюджета по категории
             if (category.MonthlyBudget.HasValue && op.Amount < 0)
             {
-                var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+                var monthStart = DateTime.SpecifyKind(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1), DateTimeKind.Utc);
                 var spent = await _context.Operations
                     .Where(o => o.CategoryId == category.Id && o.Date >= monthStart && o.Amount < 0)
                     .SumAsync(o => Math.Abs(o.Amount));
@@ -185,7 +185,7 @@ namespace backend.Controllers
                 var group = await _context.FamilyGroups.FindAsync(user.FamilyGroupId);
                 if (group != null && group.Budget > 0 && op.Amount < 0)
                 {
-                    var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+                    var monthStart = DateTime.SpecifyKind(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1), DateTimeKind.Utc);
                     var familySpent = await _context.Operations
                         .Include(o => o.User)
                         .Where(o => o.User.FamilyGroupId == group.Id && o.Date >= monthStart && o.Amount < 0)
@@ -218,11 +218,9 @@ namespace backend.Controllers
             existingOp.Amount = op.Amount;
             // Исправление: дата всегда UTC
             if (op.Date == default)
-                existingOp.Date = DateTime.UtcNow;
-            else if (op.Date.Kind != DateTimeKind.Utc)
-                existingOp.Date = DateTime.SpecifyKind(DateTime.Parse(op.Date.ToString() + "Z"), DateTimeKind.Utc);
+                existingOp.Date = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
             else
-                existingOp.Date = op.Date;
+                existingOp.Date = DateTime.SpecifyKind(op.Date, DateTimeKind.Utc);
 
             await _context.SaveChangesAsync();
             return NoContent();

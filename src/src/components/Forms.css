@@ -43,13 +43,32 @@ body {
 
 .form-group input { 
     width: 100%; 
-    padding: 0.8rem; 
-    border: none; 
-    border-radius: 2rem; 
-    background: rgba(255, 255, 255, 0.1); 
+    padding: 1rem 1.2rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.2rem; 
+    background: rgba(255, 255, 255, 0.05);
     color: #fff; 
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
 } 
+
+.form-group input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+}
 
 .already {
     text-align: center;
@@ -98,9 +117,10 @@ body {
 
   .form-group input {
     width: 100%;
-    height: 20px;
-    border-radius: 0.6rem;
-    box-sizing: border-box;
+    height: auto;
+    padding: 0.9rem 1.1rem;
+    border-radius: 1rem;
+    font-size: 0.95rem;
   }
 
   .register-form .primary-button {

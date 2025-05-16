@@ -304,26 +304,30 @@ const SharedAccess = () => {
         </div>
       </div>
       <div className="panel">
-        <h2 style={{ color: 'white' }}>Пригласить по email</h2>
+        <h2>Пригласить по email</h2>
         <input
           type="email"
+          className="invite-input"
           value={inviteEmail}
           onChange={e => setInviteEmail(e.target.value)}
-          placeholder="Email"
+          placeholder="Введите email для приглашения"
         />
-        <button onClick={handleInvite} disabled={!isValidEmail(inviteEmail)}>Пригласить</button>
+        <button 
+          className="invite-button"
+          onClick={handleInvite} 
+          disabled={!isValidEmail(inviteEmail)}
+        >
+          Пригласить
+        </button>
       </div>
-      <div className="panel">
-        <button className="btn btn-outline me-2" onClick={handleCreateGroup}>Создать новую группу</button>
-        <button className="btn btn-danger" onClick={handleDeleteGroup}>Удалить группу</button>
-      </div>
-      <div className="panel">
-        <h2 style={{ color: 'white' }}>Общий бюджет</h2>
+      <div className="panel budget-panel">
+        <h2>Общий бюджет</h2>
         <div>
-          <h3>Общий бюджет: {budget} ₽</h3>
+          <h3>Общий бюджет: <span className="budget-value">{budget} ₽</span></h3>
           {isAdmin && (
             <input
               type="number"
+              className="budget-input"
               value={budget}
               onChange={e => handleSetBudget(Number(e.target.value))}
               placeholder="Установить бюджет"
@@ -332,14 +336,16 @@ const SharedAccess = () => {
         </div>
       </div>
       <div className="panel">
-        <h2 style={{ color: 'white' }}>Бюджеты по категориям</h2>
-        <ul>
+        <h2>Бюджеты по категориям</h2>
+        <ul className="category-list">
           {categoryBudgets.map(cat => (
-            <li key={cat.id}>
-              {cat.name}: {cat.monthlyBudget || 0} ₽
+            <li key={cat.id} className="category-item">
+              <span className="category-name">{cat.name}</span>
+              <span className="category-budget">{cat.monthlyBudget || 0} ₽</span>
               {isAdmin && (
                 <input
                   type="number"
+                  className="category-input"
                   defaultValue={cat.monthlyBudget || ''}
                   onBlur={e => handleSetCategoryBudget(cat.id, Number(e.target.value))}
                   placeholder="Установить бюджет"

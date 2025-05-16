@@ -314,10 +314,7 @@ const FamilyBudget = () => {
         </div>
       )}
       {/* Кнопки управления группой */}
-      <div className="mb-4">
-        <button className="btn btn-outline me-2" onClick={handleCreateGroup}>Создать новую группу</button>
-        <button className="btn btn-danger" onClick={handleDeleteGroup}>Удалить группу</button>
-      </div>
+
       {notification && (
         <div style={{ position: 'fixed', top: '20px', right: '20px', backgroundColor: notification.type === 'success' ? '#2ecc71' : '#e74c3c', color: 'white', padding: '15px 25px', borderRadius: '4px', zIndex: 1000 }}>{notification.message}</div>
       )}

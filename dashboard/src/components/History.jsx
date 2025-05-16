@@ -296,8 +296,8 @@ const History = () => {
       </div>
 
       {/* Форма добавления новой операции */}
-      <div className="p-3 mb-3" style={{ backgroundColor: '#390668', borderRadius: '8px' }}>
-        <h5 style={{ color: 'white', marginBottom: '15px' }}>Добавить новую операцию</h5>
+      <div className="p-3 mb-3">
+        <h3 style={{ color: 'white', marginBottom: '15px' }}>Добавить новую операцию</h3>
         <div className={isMobile ? "d-grid gap-2" : "d-flex flex-wrap gap-2 align-items-center"}>
           <input
             type="text"
@@ -355,7 +355,7 @@ const History = () => {
       </div>
 
       {/* Список операций */}
-      <div className="card" style={{ backgroundColor: '#390668' }}>
+      <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center">
           <h5 style={{ fontSize: isMobile ? '160%' : '185%', margin: 0 }} className="card-title">Список операций</h5>
           <input 

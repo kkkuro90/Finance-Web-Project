@@ -493,28 +493,48 @@ textarea {
     margin: 0;
     font-family: inherit;
     font-size: inherit;
-    line-height: inherit
+    line-height: inherit;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    padding: 0.8rem 1rem;
+    transition: all 0.3s ease;
 }
 
-button,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
 select {
-    text-transform: none
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
 }
 
-[role=button] {
-    cursor: pointer
-}
-
-select {
-    word-wrap: normal
-}
-
-select:disabled {
-    opacity: 1
-}
-
-[list]:not([type=date]):not([type=datetime-local]):not([type=month]):not([type=week]):not([type=time])::-webkit-calendar-picker-indicator {
-    display: none !important
+textarea {
+    min-height: 100px;
+    resize: vertical;
 }
 
 [type=button],
@@ -534,10 +554,6 @@ button:not(:disabled) {
 ::-moz-focus-inner {
     padding: 0;
     border-style: none
-}
-
-textarea {
-    resize: vertical
 }
 
 fieldset {
@@ -2149,7 +2165,7 @@ progress {
     --bs-table-bg-type: initial;
     --bs-table-color-state: initial;
     --bs-table-bg-state: initial;
-    --bs-table-color: var(--bs-body-color);
+    --bs-table-color: white;
     --bs-table-bg: var(--bs-body-bg);
     --bs-table-border-color: var(--bs-border-color);
     --bs-table-accent-bg: transparent;
@@ -2168,9 +2184,7 @@ progress {
 .table>:not(caption)>*>* {
     padding: .5rem .5rem;
     color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
-    background-color: var(--bs-table-bg);
     border-bottom-width: var(--bs-border-width);
-    box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)))
 }
 
 .table>tbody {
@@ -2417,8 +2431,8 @@ progress {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: var(--bs-body-color);
-    background-color: var(--bs-body-bg);
+    color: white;
+    background-color: #140a1e1c;
     background-clip: padding-box;
     border: var(--bs-border-width) solid var(--bs-border-color);
     -webkit-appearance: none;
@@ -2443,8 +2457,6 @@ progress {
 }
 
 .form-control:focus {
-    color: var(--bs-body-color);
-    background-color: var(--bs-body-bg);
     border-color: #86b7fe;
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25)
@@ -2640,8 +2652,8 @@ textarea.form-control-lg {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: var(--bs-body-color);
-    background-color: var(--bs-body-bg);
+    color: white;
+    background-color: #140a1e1c;;
     background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
     background-repeat: no-repeat;
     background-position: right .75rem center;
@@ -4993,7 +5005,7 @@ fieldset:disabled .btn {
     --bs-card-title-color: ;
     --bs-card-subtitle-color: ;
     --bs-card-border-width: var(--bs-border-width);
-    --bs-card-border-color: var(--bs-border-color-translucent);
+    --bs-card-border-color: rgb(0 0 0 / 41%);
     --bs-card-border-radius: var(--bs-border-radius);
     --bs-card-box-shadow: ;
     --bs-card-inner-border-radius: calc(var(--bs-border-radius) - (var(--bs-border-width)));
@@ -5075,7 +5087,7 @@ fieldset:disabled .btn {
     padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
     margin-bottom: 0;
     color: white;
-    background-color: #21013f;
+    background-color: #21013f4f;
     border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color)
 }
 
@@ -5575,7 +5587,7 @@ fieldset:disabled .btn {
 }
 
 .alert-info {
-    --bs-alert-color: var(--bs-info-text-emphasis);
+    --bs-alert-color: white;
     --bs-alert-bg: var(--bs-info-bg-subtle);
     --bs-alert-border-color: var(--bs-info-border-subtle);
     --bs-alert-link-color: var(--bs-info-text-emphasis)
@@ -8989,7 +9001,8 @@ fieldset:disabled .btn {
 }
 
 .me-2 {
-    margin-right: .5rem !important
+    margin-right: .5rem !important;
+    outline: 1px purple solid
 }
 
 .me-3 {
@@ -9021,7 +9034,9 @@ fieldset:disabled .btn {
 }
 
 .mb-3 {
-    margin-bottom: 1rem !important
+    margin-bottom: 1rem !important;
+    background-color: rgb(0 0 0 / 32%);
+    border-radius: 8px;
 }
 
 .mb-4 {
@@ -13970,9 +13985,8 @@ th {
 
 .card {
     width: 95%;
-    /* Увеличиваем ширину карточки */
     height: auto;
-    /* Автоматическая высота */
+    background-color: rgb(0 0 0 / 30%);
 }
 
 .card-body {
@@ -14124,6 +14138,7 @@ th {
     border-radius: 4px;
     background-color: #390668;
     color: white;
+    outline: 1px solid var(--bs-dark-text-emphasis);
 }
 
 .save-btn {
