@@ -806,3 +806,124 @@ input:required:valid {
     
   }
   
+/* Family Group Styles */
+.family-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.family-content {
+    background: rgba(24, 24, 26, 0.7);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.no-family {
+    text-align: center;
+    padding: 2rem;
+}
+
+.family-member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(160, 32, 240, 0.1);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.owner-badge {
+    background: rgb(160, 32, 240);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+}
+
+.family-budget {
+    background: rgba(160, 32, 240, 0.1);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.invites-list {
+    margin-top: 1rem;
+}
+
+.invite-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: rgba(160, 32, 240, 0.1);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.invite-status {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    background: rgba(160, 32, 240, 0.3);
+}
+
+.family-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background: #18181a;
+    margin: 15% auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #fff;
+}
+
+/* Responsive styles for family section */
+@media (max-width: 768px) {
+    .family-section {
+        padding: 1rem;
+    }
+
+    .family-content {
+        padding: 1rem;
+    }
+
+    .family-actions {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+    }
+}
+  

@@ -3,7 +3,14 @@ const config = {
     endpoints: {
         login: '/auth/login',
         register: '/auth/register',
-        profile: '/auth/profile'
+        profile: '/auth/profile',
+        familyCreate: '/family/create',
+        familyInvite: '/family/invite',
+        familyAcceptInvite: '/family/accept-invite',
+        familyMembers: '/family/members',
+        familyBudget: '/family/budget',
+        familyInvites: '/family/invites',
+        familyDelete: '/family/delete'
     }
 };
 
@@ -50,4 +57,31 @@ function checkGuest() {
         return false;
     }
     return true;
+}
+
+// Функция для отправки запросов с авторизацией
+async function fetchWithAuth(url, options = {}) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('Не авторизован');
+    }
+
+    const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers
+    };
+
+    const response = await fetch(url, {
+        ...options,
+        headers
+    });
+
+    if (response.status === 401) {
+        localStorage.removeItem('token');
+        redirectToLogin();
+        throw new Error('Сессия истекла');
+    }
+
+    return response;
 } 

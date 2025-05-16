@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семейная группа - Waves</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">Waves</div>
+            <nav>
+                <a href="/profile">Профиль</a>
+                <a href="/dashboard">Дашборд</a>
+                <a href="/family" class="active">Семья</a>
+            </nav>
+        </header>
+
+        <section id="familySection" class="family-section">
+            <h2>Управление семейной группой</h2>
+            <div id="familyContent" class="family-content">
+                <!-- Контент будет добавлен динамически -->
+            </div>
+        </section>
+
+        <!-- Модальное окно для приглашения -->
+        <div id="inviteModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('inviteModal')">&times;</span>
+                <h3>Пригласить члена семьи</h3>
+                <form id="inviteForm">
+                    <div class="form-group">
+                        <label for="inviteEmail">Email:</label>
+                        <input type="email" id="inviteEmail" required>
+                    </div>
+                    <button type="submit" class="primary-button">Отправить приглашение</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальное окно для установки бюджета -->
+        <div id="budgetModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('budgetModal')">&times;</span>
+                <h3>Установить семейный бюджет</h3>
+                <form id="budgetForm">
+                    <div class="form-group">
+                        <label for="familyBudget">Бюджет (руб.):</label>
+                        <input type="number" id="familyBudget" min="0" step="100" required>
+                    </div>
+                    <button type="submit" class="primary-button">Установить бюджет</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="family.js"></script>
+</body>
+</html> 

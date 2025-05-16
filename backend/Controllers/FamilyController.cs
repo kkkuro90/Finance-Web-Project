@@ -5,6 +5,7 @@ using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using backend.Services;
 
 namespace backend.Controllers
 {
@@ -15,11 +16,13 @@ namespace backend.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IEmailService _emailService;
 
-        public FamilyController(ApplicationDbContext context, UserManager<User> userManager)
+        public FamilyController(ApplicationDbContext context, UserManager<User> userManager, IEmailService emailService)
         {
             _context = context;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         [HttpGet("members")]
@@ -135,8 +138,20 @@ namespace backend.Controllers
             await _context.FamilyInvites.AddAsync(invite);
             await _context.SaveChangesAsync();
 
-            // Здесь можно отправить email или уведомление (заглушка)
-            // Если пользователь уже есть, можно сразу добавить уведомление
+            // Отправляем email с приглашением
+            if (!string.IsNullOrEmpty(model.Email))
+            {
+                var inviteUrl = $"http://localhost:3000/accept-invite?token={token}";
+                var emailBody = $@"
+                    <h2>Приглашение в семейную группу Waves</h2>
+                    <p>{user.Name} {user.Surname} приглашает вас присоединиться к семейной группе в приложении Waves.</p>
+                    <p>Для принятия приглашения перейдите по ссылке:</p>
+                    <p><a href='{inviteUrl}'>Принять приглашение</a></p>
+                    <p>Если вы не зарегистрированы в Waves, сначала создайте аккаунт с этим email.</p>
+                    <p>С уважением,<br>Команда Waves</p>";
+
+                await _emailService.SendEmailAsync(model.Email, "Приглашение в семейную группу Waves", emailBody);
+            }
 
             return Ok(new { Message = "Приглашение отправлено!", Token = token });
         }
